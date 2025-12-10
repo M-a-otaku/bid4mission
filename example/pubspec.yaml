@@ -1,0 +1,27 @@
+name: example
+description: "دموی پکیج ماموریت"
+
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  get: ^4.6.6
+  bid4mission:
+    path: ../
+  shared_preferences: ^2.3.3
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+
+  uses-material-design: true
+

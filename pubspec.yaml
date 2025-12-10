@@ -1,0 +1,30 @@
+name: bid4mission
+description: "Final"
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: ^3.5.1
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  get: ^4.6.6
+  http: ^0.13.5
+  intl: ^0.17.0
+  either_dart: ^1.0.0
+  shared_preferences: ^2.3.3
+  get_storage: ^2.1.1
+  get_cli: ^1.8.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/Images/
+    - assets/Images/rolls_royce.png
