@@ -1,4 +1,4 @@
-// lib/presentation/screens/hunter_profile_screen.dart
+﻿
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,7 +9,6 @@ import '../../../../generated/locales.g.dart';
 import '../controller/hunter_profile_controller.dart';
 import '../models/view_models/proposal_profile_model.dart';
 
-
 class HunterProfileScreen extends GetView<HunterProfileController> {
   const HunterProfileScreen({super.key});
 
@@ -17,7 +16,8 @@ class HunterProfileScreen extends GetView<HunterProfileController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('پروفایل شکارچی', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(LocaleKeys.profile_page_title_hunter_profile.tr,
+            style: const TextStyle(fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
       body: GetX<HunterProfileController>(builder: (ctrl) {
@@ -33,100 +33,176 @@ class HunterProfileScreen extends GetView<HunterProfileController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ---------- Filter tags (ChoiceChips) bound to controller ----------
-                // outer Obx removed — inner chips already use Obx to react to controller changes
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    _buildFilterChipBound('all', LocaleKeys.profile_page_filter_all.tr, Colors.grey.shade700),
-                    _buildFilterChipBound('active', LocaleKeys.profile_page_filter_active.tr, Colors.blue.shade700),
-                    _buildFilterChipBound('awaiting', LocaleKeys.profile_page_filter_awaiting.tr, Colors.orange.shade700),
-                    _buildFilterChipBound('failed', LocaleKeys.profile_page_filter_failed.tr, Colors.red.shade700),
-                    _buildFilterChipBound('confirmed', LocaleKeys.profile_page_filter_confirmed.tr, Colors.green.shade700),
-                    _buildFilterChipBound('history', LocaleKeys.profile_page_filter_history.tr, Colors.grey.shade600),
+                    _buildFilterChipBound(
+                        'all',
+                        LocaleKeys.profile_page_filter_all.tr,
+                        Colors.grey.shade700),
+                    _buildFilterChipBound(
+                        'active',
+                        LocaleKeys.profile_page_filter_active.tr,
+                        Colors.blue.shade700),
+                    _buildFilterChipBound(
+                        'awaiting',
+                        LocaleKeys.profile_page_filter_awaiting.tr,
+                        Colors.orange.shade700),
+                    _buildFilterChipBound(
+                        'failed',
+                        LocaleKeys.profile_page_filter_failed.tr,
+                        Colors.red.shade700),
+                    _buildFilterChipBound(
+                        'confirmed',
+                        LocaleKeys.profile_page_filter_confirmed.tr,
+                        Colors.green.shade700),
+                    _buildFilterChipBound(
+                        'history',
+                        LocaleKeys.profile_page_filter_history.tr,
+                        Colors.grey.shade600),
                   ],
                 ),
 
                 const SizedBox(height: 12),
 
-                // Show either all sections or only the selected filter section
+                
                 Builder(builder: (_) {
                   final key = controller.selectedFilter.value;
                   if (key == 'all') {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildHeader('🎯 ${LocaleKeys.profile_page_filter_active.tr} (${controller.activeMissions.length})', Colors.blue.shade700),
+                        _buildHeader(
+                            'ðŸŽ¯ ${LocaleKeys.profile_page_filter_active.tr} (${controller.activeMissions.length})',
+                            Colors.blue.shade700),
                         const SizedBox(height: 10),
                         controller.activeMissions.isEmpty
-                            ? _buildEmptyState(LocaleKeys.profile_page_no_active_missions.tr)
-                            : _buildMissionList(controller.activeMissions, isHistory: false),
-
+                            ? _buildEmptyState(
+                                LocaleKeys.profile_page_no_active_missions.tr)
+                            : _buildMissionList(controller.activeMissions,
+                                isHistory: false),
                         const SizedBox(height: 20),
-                        _buildHeader('⏳ ${LocaleKeys.profile_page_filter_awaiting.tr} (${controller.awaitingApprovalCombined.length})', Colors.orange.shade700),
+                        _buildHeader(
+                            'â³ ${LocaleKeys.profile_page_filter_awaiting.tr} (${controller.awaitingApprovalCombined.length})',
+                            Colors.orange.shade700),
                         const SizedBox(height: 10),
                         controller.awaitingApprovalCombined.isEmpty
-                            ? _buildEmptyState(LocaleKeys.profile_page_no_awaiting.tr)
-                            : _buildMissionList(controller.awaitingApprovalCombined, isHistory: true),
-
+                            ? _buildEmptyState(
+                                LocaleKeys.profile_page_no_awaiting.tr)
+                            : _buildMissionList(
+                                controller.awaitingApprovalCombined,
+                                isHistory: true),
                         const SizedBox(height: 20),
-                        _buildHeader('❌ ${LocaleKeys.profile_page_filter_failed.tr} (${controller.failedRequestsCombined.length})', Colors.red.shade700),
+                        _buildHeader(
+                            'âŒ ${LocaleKeys.profile_page_filter_failed.tr} (${controller.failedRequestsCombined.length})',
+                            Colors.red.shade700),
                         const SizedBox(height: 10),
                         controller.failedRequestsCombined.isEmpty
-                            ? _buildEmptyState(LocaleKeys.profile_page_no_failed.tr)
-                            : _buildMissionList(controller.failedRequestsCombined, isHistory: false),
-
+                            ? _buildEmptyState(
+                                LocaleKeys.profile_page_no_failed.tr)
+                            : _buildMissionList(
+                                controller.failedRequestsCombined,
+                                isHistory: false),
                         const SizedBox(height: 20),
-                        _buildHeader('✅ ${LocaleKeys.profile_page_filter_confirmed.tr} (${controller.confirmedRequests.length})', Colors.green.shade700),
+                        _buildHeader(
+                            'âœ… ${LocaleKeys.profile_page_filter_confirmed.tr} (${controller.confirmedRequests.length})',
+                            Colors.green.shade700),
                         const SizedBox(height: 10),
                         controller.confirmedRequests.isEmpty
-                            ? _buildEmptyState(LocaleKeys.profile_page_no_confirmed.tr)
-                            : _buildMissionList(controller.confirmedRequests, isHistory: true),
-
+                            ? _buildEmptyState(
+                                LocaleKeys.profile_page_no_confirmed.tr)
+                            : _buildMissionList(controller.confirmedRequests,
+                                isHistory: true),
                         const Divider(height: 40),
-
-                        _buildHeader('📜 ${LocaleKeys.profile_page_filter_history.tr} (${controller.historyProposals.length})', Colors.grey.shade700),
+                        _buildHeader(
+                            'ðŸ“œ ${LocaleKeys.profile_page_filter_history.tr} (${controller.historyProposals.length})',
+                            Colors.grey.shade700),
                         const SizedBox(height: 10),
                         controller.historyProposals.isEmpty
-                            ? _buildEmptyState(LocaleKeys.profile_page_no_history.tr)
-                            : _buildMissionList(controller.historyProposals, isHistory: true),
+                            ? _buildEmptyState(
+                                LocaleKeys.profile_page_no_history.tr)
+                            : _buildMissionList(controller.historyProposals,
+                                isHistory: true),
                       ],
                     );
                   }
 
-                  // single-section mode
+                  
                   switch (key) {
                     case 'active':
-                      return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        _buildHeader('🎯 ${LocaleKeys.profile_page_filter_active.tr} (${controller.activeMissions.length})', Colors.blue.shade700),
-                        const SizedBox(height: 10),
-                        controller.activeMissions.isEmpty ? _buildEmptyState(LocaleKeys.profile_page_no_active_missions.tr) : _buildMissionList(controller.activeMissions, isHistory: false),
-                      ]);
+                      return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildHeader(
+                                'ðŸŽ¯ ${LocaleKeys.profile_page_filter_active.tr} (${controller.activeMissions.length})',
+                                Colors.blue.shade700),
+                            const SizedBox(height: 10),
+                            controller.activeMissions.isEmpty
+                                ? _buildEmptyState(LocaleKeys
+                                    .profile_page_no_active_missions.tr)
+                                : _buildMissionList(controller.activeMissions,
+                                    isHistory: false),
+                          ]);
                     case 'awaiting':
-                      return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        _buildHeader('⏳ ${LocaleKeys.profile_page_filter_awaiting.tr} (${controller.awaitingApprovalCombined.length})', Colors.orange.shade700),
-                        const SizedBox(height: 10),
-                        controller.awaitingApprovalCombined.isEmpty ? _buildEmptyState(LocaleKeys.profile_page_no_awaiting.tr) : _buildMissionList(controller.awaitingApprovalCombined, isHistory: true),
-                      ]);
+                      return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildHeader(
+                                'â³ ${LocaleKeys.profile_page_filter_awaiting.tr} (${controller.awaitingApprovalCombined.length})',
+                                Colors.orange.shade700),
+                            const SizedBox(height: 10),
+                            controller.awaitingApprovalCombined.isEmpty
+                                ? _buildEmptyState(
+                                    LocaleKeys.profile_page_no_awaiting.tr)
+                                : _buildMissionList(
+                                    controller.awaitingApprovalCombined,
+                                    isHistory: true),
+                          ]);
                     case 'failed':
-                      return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        _buildHeader('❌ ${LocaleKeys.profile_page_filter_failed.tr} (${controller.failedRequestsCombined.length})', Colors.red.shade700),
-                        const SizedBox(height: 10),
-                        controller.failedRequestsCombined.isEmpty ? _buildEmptyState(LocaleKeys.profile_page_no_failed.tr) : _buildMissionList(controller.failedRequestsCombined, isHistory: false),
-                      ]);
+                      return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildHeader(
+                                'âŒ ${LocaleKeys.profile_page_filter_failed.tr} (${controller.failedRequestsCombined.length})',
+                                Colors.red.shade700),
+                            const SizedBox(height: 10),
+                            controller.failedRequestsCombined.isEmpty
+                                ? _buildEmptyState(
+                                    LocaleKeys.profile_page_no_failed.tr)
+                                : _buildMissionList(
+                                    controller.failedRequestsCombined,
+                                    isHistory: false),
+                          ]);
                     case 'confirmed':
-                      return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        _buildHeader('✅ ${LocaleKeys.profile_page_filter_confirmed.tr} (${controller.confirmedRequests.length})', Colors.green.shade700),
-                        const SizedBox(height: 10),
-                        controller.confirmedRequests.isEmpty ? _buildEmptyState(LocaleKeys.profile_page_no_confirmed.tr) : _buildMissionList(controller.confirmedRequests, isHistory: true),
-                      ]);
+                      return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildHeader(
+                                'âœ… ${LocaleKeys.profile_page_filter_confirmed.tr} (${controller.confirmedRequests.length})',
+                                Colors.green.shade700),
+                            const SizedBox(height: 10),
+                            controller.confirmedRequests.isEmpty
+                                ? _buildEmptyState(
+                                    LocaleKeys.profile_page_no_confirmed.tr)
+                                : _buildMissionList(
+                                    controller.confirmedRequests,
+                                    isHistory: true),
+                          ]);
                     case 'history':
-                      return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        _buildHeader('📜 ${LocaleKeys.profile_page_filter_history.tr} (${controller.historyProposals.length})', Colors.grey.shade700),
-                        const SizedBox(height: 10),
-                        controller.historyProposals.isEmpty ? _buildEmptyState(LocaleKeys.profile_page_no_history.tr) : _buildMissionList(controller.historyProposals, isHistory: true),
-                      ]);
+                      return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildHeader(
+                                'ðŸ“œ ${LocaleKeys.profile_page_filter_history.tr} (${controller.historyProposals.length})',
+                                Colors.grey.shade700),
+                            const SizedBox(height: 10),
+                            controller.historyProposals.isEmpty
+                                ? _buildEmptyState(
+                                    LocaleKeys.profile_page_no_history.tr)
+                                : _buildMissionList(controller.historyProposals,
+                                    isHistory: true),
+                          ]);
                     default:
                       return const SizedBox.shrink();
                   }
@@ -139,10 +215,14 @@ class HunterProfileScreen extends GetView<HunterProfileController> {
     );
   }
 
-  // helper to build a single filter chip bound to controller.selectedFilter
+  
   Widget _buildFilterChipBound(String key, String label, Color color) {
     return Obx(() => ChoiceChip(
-          label: Text(label, style: TextStyle(color: controller.selectedFilter.value == key ? Colors.white : Colors.black)),
+          label: Text(label,
+              style: TextStyle(
+                  color: controller.selectedFilter.value == key
+                      ? Colors.white
+                      : Colors.black)),
           selected: controller.selectedFilter.value == key,
           onSelected: (v) {
             if (v) {
@@ -154,7 +234,7 @@ class HunterProfileScreen extends GetView<HunterProfileController> {
         ));
   }
 
-  // ویجت هدر بخش‌ها
+  
   Widget _buildHeader(String title, Color color) {
     return Text(
       title,
@@ -166,28 +246,31 @@ class HunterProfileScreen extends GetView<HunterProfileController> {
     );
   }
 
-  // ویجت لیست پیشنهادات
-  Widget _buildMissionList(List<ProposalProfileModel> proposals, {required bool isHistory}) {
+  
+  Widget _buildMissionList(List<ProposalProfileModel> proposals,
+      {required bool isHistory}) {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: proposals.length,
       itemBuilder: (context, index) {
         final proposal = proposals[index];
-        // Use embedded mission title (repository now enriches proposals when possible).
-        final missionTitle = proposal.mission?.title ?? 'عنوان نامشخص';
+        
+        final missionTitle = proposal.mission?.title ??
+            LocaleKeys.profile_page_mission_title_unknown.tr;
 
         return _buildProposalItem(proposal, missionTitle, isHistory);
       },
     );
   }
 
-  // ویجت آیتم پیشنهادات
-  Widget _buildProposalItem(ProposalProfileModel proposal, String title, bool isHistory) {
-    // 💡 نمایش عنوان بر اساس وضعیت isCompleted
+  
+  Widget _buildProposalItem(
+      ProposalProfileModel proposal, String title, bool isHistory) {
+    
     String statusText;
     Color statusColor;
-    // Prefer mission.status for clear UI if available
+    
     final missionStatus = proposal.mission?.status;
     final isFailed = missionStatus == Status.failed;
     if (missionStatus != null) {
@@ -204,7 +287,7 @@ class HunterProfileScreen extends GetView<HunterProfileController> {
         statusText = LocaleKeys.profile_page_status_completed.tr;
         statusColor = Colors.blue;
       } else {
-        // fall back to proposal flags
+        
         if (proposal.isCompleted) {
           statusText = LocaleKeys.profile_page_status_pending_approval.tr;
           statusColor = Colors.orange;
@@ -240,58 +323,71 @@ class HunterProfileScreen extends GetView<HunterProfileController> {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('قیمت پیشنهادی: ${intl.NumberFormat('#,###').format(proposal.proposedPrice)} تومان'),
-            Text('ارسال: ${intl.DateFormat('yyyy/MM/dd').format(proposal.createdAt)}'),
+            Text(LocaleKeys.profile_proposed_price_label.trParams({
+              'price': intl.NumberFormat('#,###').format(proposal.proposedPrice)
+            })),
+            Text(LocaleKeys.profile_sent_label.trParams({
+              'date': intl.DateFormat('yyyy/MM/dd').format(proposal.createdAt)
+            })),
             const SizedBox(height: 4),
             Text(
               statusText,
-              style: TextStyle(color: statusColor, fontWeight: FontWeight.bold, fontSize: 13),
+              style: TextStyle(
+                  color: statusColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13),
             ),
           ],
         ),
         trailing: (isHistory || proposal.isCompleted || isFailed)
-            ? null // برای تاریخچه یا ماموریت‌های منتظر تأیید، دکمه‌ای نیست
+            ? null 
             : Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // If proposal is not accepted, allow edit & delete
-            if (!proposal.isAccepted) ...[
-              IconButton(
-                icon: const Icon(Icons.edit, color: Colors.orange),
-                tooltip: 'ویرایش پیشنهاد',
-                onPressed: () => _showEditProposalDialog(proposal),
-              ),
-              IconButton(
-                icon: const Icon(Icons.delete_forever, color: Colors.redAccent),
-                tooltip: 'حذف پیشنهاد',
-                onPressed: () => _showDeleteProposalDialog(proposal),
-              ),
-            ],
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  
+                  if (!proposal.isAccepted) ...[
+                    IconButton(
+                      icon: const Icon(Icons.edit, color: Colors.orange),
+                      tooltip:
+                          LocaleKeys.profile_action_edit_proposal_tooltip.tr,
+                      onPressed: () => _showEditProposalDialog(proposal),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete_forever,
+                          color: Colors.redAccent),
+                      tooltip:
+                          LocaleKeys.profile_action_delete_proposal_tooltip.tr,
+                      onPressed: () => _showDeleteProposalDialog(proposal),
+                    ),
+                  ],
 
-            ElevatedButton(
-              onPressed: () => _showCompletionDialog(proposal), // 🎯 فراخوانی دیالوگ
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.indigo,
-                foregroundColor: Colors.white,
+                  ElevatedButton(
+                    onPressed: () => _showCompletionDialog(proposal),
+                    
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.indigo,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: Text(LocaleKeys.profile_button_announce_success.tr,
+                        style: const TextStyle(color: Colors.white)),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () => _showFailureDialog(proposal),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: Text(LocaleKeys.profile_button_announce_failure.tr,
+                        style: const TextStyle(color: Colors.white)),
+                  ),
+                ],
               ),
-              child: const Text('اعلام موفقیت'),
-            ),
-            const SizedBox(width: 8),
-            ElevatedButton(
-              onPressed: () => _showFailureDialog(proposal),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.redAccent,
-                foregroundColor: Colors.white,
-              ),
-              child: const Text('اعلام شکست'),
-            ),
-          ],
-        ),
       ),
     );
   }
 
-  // ویجت حالت خالی
+  
   Widget _buildEmptyState(String message) {
     return Center(
       child: Padding(
@@ -308,23 +404,30 @@ class HunterProfileScreen extends GetView<HunterProfileController> {
   void _showCompletionDialog(ProposalProfileModel proposal) {
     Get.dialog(
       AlertDialog(
-        title: const Text('اعلام موفقیت ماموریت', textAlign: TextAlign.center),
+        title: Text(LocaleKeys.profile_dialog_request_completion_title.tr,
+            textAlign: TextAlign.center),
         content: Text(
-          'آیا مطمئن هستید که ماموریت "${proposal.mission?.title ?? 'نامعلوم'}" با موفقیت تکمیل شده است؟\n\nپس از تأیید، درخواست برای کارفرما ارسال می‌شود.',
+          LocaleKeys.profile_dialog_request_completion_content.trParams({
+            'title': proposal.mission?.title ??
+                LocaleKeys.profile_page_mission_title_unknown.tr
+          }),
           textAlign: TextAlign.center,
         ),
         actions: [
-          TextButton(onPressed: () => Get.back(), child: const Text('انصراف')),
+          TextButton(
+              onPressed: () => Get.back(),
+              child: Text(LocaleKeys.common_cancel.tr)),
           ElevatedButton(
             onPressed: () {
               Get.back();
-              controller.requestCompletion(proposal); // 🎯 فراخوانی Controller
+              controller.requestCompletion(proposal); 
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green,
               foregroundColor: Colors.white,
             ),
-            child: const Text('بله، اعلام موفقیت'),
+            child: Text(LocaleKeys.profile_dialog_request_completion_confirm.tr,
+                style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -334,13 +437,19 @@ class HunterProfileScreen extends GetView<HunterProfileController> {
   void _showFailureDialog(ProposalProfileModel proposal) {
     Get.dialog(
       AlertDialog(
-        title: const Text('اعلام شکست ماموریت', textAlign: TextAlign.center),
+        title: Text(LocaleKeys.profile_dialog_request_failure_title.tr,
+            textAlign: TextAlign.center),
         content: Text(
-          'آیا مطمئن هستید که ماموریت "${proposal.mission?.title ?? 'نامعلوم'}" شکست خورده است و باید به کارفرما اعلام شود؟\n\nپس از تأیید کارفرما وضعیت ماموریت به "شکست خورده" تغییر خواهد کرد.',
+          LocaleKeys.profile_dialog_request_failure_content.trParams({
+            'title': proposal.mission?.title ??
+                LocaleKeys.profile_page_mission_title_unknown.tr
+          }),
           textAlign: TextAlign.center,
         ),
         actions: [
-          TextButton(onPressed: () => Get.back(), child: const Text('انصراف')),
+          TextButton(
+              onPressed: () => Get.back(),
+              child: Text(LocaleKeys.common_cancel.tr)),
           ElevatedButton(
             onPressed: () {
               Get.back();
@@ -350,7 +459,8 @@ class HunterProfileScreen extends GetView<HunterProfileController> {
               backgroundColor: Colors.redAccent,
               foregroundColor: Colors.white,
             ),
-            child: const Text('بله، اعلام شکست'),
+            child: Text(LocaleKeys.profile_dialog_request_failure_confirm.tr,
+                style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -358,36 +468,46 @@ class HunterProfileScreen extends GetView<HunterProfileController> {
   }
 
   void _showEditProposalDialog(ProposalProfileModel proposal) {
-    final priceCtrl = TextEditingController(text: proposal.proposedPrice.toString());
+    final priceCtrl =
+        TextEditingController(text: proposal.proposedPrice.toString());
     final formKey = GlobalKey<FormState>();
 
     Get.dialog(AlertDialog(
-      title: const Text('ویرایش قیمت پیشنهاد', textAlign: TextAlign.center),
+      title: Text(LocaleKeys.profile_edit_proposal_title.tr,
+          textAlign: TextAlign.center),
       content: Form(
         key: formKey,
         child: TextFormField(
           controller: priceCtrl,
           keyboardType: TextInputType.number,
           textDirection: TextDirection.ltr,
-          decoration: const InputDecoration(prefixIcon: Icon(Icons.attach_money), labelText: 'قیمت (تومان)'),
+          decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.attach_money),
+              labelText: LocaleKeys.profile_edit_proposal_price_label.tr),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: (v) {
-            if (v == null || v.trim().isEmpty) return 'قیمت را وارد کنید';
+            if (v == null || v.trim().isEmpty)
+              return LocaleKeys.profile_edit_proposal_price_required.tr;
             final n = int.tryParse(v.replaceAll(',', ''));
-            if (n == null || n <= 0) return 'قیمت معتبر نیست';
+            if (n == null || n <= 0)
+              return LocaleKeys.profile_edit_proposal_price_invalid.tr;
             return null;
           },
         ),
       ),
       actions: [
-        TextButton(onPressed: () => Get.back(), child: const Text('انصراف')),
+        TextButton(
+            onPressed: () => Get.back(),
+            child: Text(LocaleKeys.common_cancel.tr)),
         ElevatedButton(
           onPressed: () async {
             if (!formKey.currentState!.validate()) return;
             final newPrice = int.parse(priceCtrl.text.replaceAll(',', ''));
             Get.back();
-            await controller.editProposal(proposalId: proposal.id, newPrice: newPrice);
+            await controller.editProposal(
+                proposalId: proposal.id, newPrice: newPrice);
           },
-          child: const Text('ذخیره'),
+          child: Text(LocaleKeys.profile_edit_proposal_save.tr),
         )
       ],
     ));
@@ -395,19 +515,24 @@ class HunterProfileScreen extends GetView<HunterProfileController> {
 
   void _showDeleteProposalDialog(ProposalProfileModel proposal) {
     Get.dialog(AlertDialog(
-      title: const Text('حذف پیشنهاد', textAlign: TextAlign.center),
-      content: const Text('آیا از حذف این پیشنهاد اطمینان دارید؟'),
+      title: Text(LocaleKeys.profile_delete_proposal_title.tr,
+          textAlign: TextAlign.center),
+      content: Text(LocaleKeys.profile_delete_proposal_content.tr),
       actions: [
-        TextButton(onPressed: () => Get.back(), child: const Text('انصراف')),
+        TextButton(
+            onPressed: () => Get.back(),
+            child: Text(LocaleKeys.common_cancel.tr)),
         ElevatedButton(
           style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
           onPressed: () async {
             Get.back();
             await controller.deleteProposal(proposalId: proposal.id);
           },
-          child: const Text('حذف'),
+          child: Text(LocaleKeys.profile_delete_proposal_confirm.tr),
         ),
       ],
     ));
   }
 }
+
+

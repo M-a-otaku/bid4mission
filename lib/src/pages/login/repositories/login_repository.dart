@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'package:either_dart/either.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -28,7 +28,7 @@ class LoginRepository {
       if (user != null && user["id"] != null) {
         return Right({
           'id': user['id'],
-          // normalize role string to expected token using enum helpers
+          
           'role': roleToString(parseRole(user['role']?.toString())),
         });
       }
@@ -38,3 +38,4 @@ class LoginRepository {
     }
   }
 }
+

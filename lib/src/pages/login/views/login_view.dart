@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../generated/locales.g.dart';
 import '../controller/login_controller.dart';
@@ -76,7 +76,7 @@ class LoginView extends GetView<LoginController> {
 
                   SizedBox(height: size.height * 0.08),
 
-                  // کارت فرم
+                  
                   Container(
                     width: double.infinity,
                     padding: EdgeInsets.all(isTablet ? 40 : 28),
@@ -176,7 +176,7 @@ class LoginView extends GetView<LoginController> {
 
                         const SizedBox(height: 20),
 
-                        // ثبت‌نام
+                        
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -217,12 +217,13 @@ class LoginView extends GetView<LoginController> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    // pick a fill color that works both in light and dark modes
+    
     final fillColor = theme.inputDecorationTheme.fillColor ?? colorScheme.surfaceContainerLowest.withValues(alpha: 0.04);
 
     return TextFormField(
       controller: textController,
       obscureText: obscureText,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: validator,
       readOnly: controller.isLoading.value,
       style: theme.textTheme.bodyLarge?.copyWith(color: colorScheme.onSurface),
@@ -233,23 +234,16 @@ class LoginView extends GetView<LoginController> {
         suffixIcon: suffixIcon,
         filled: true,
         fillColor: fillColor,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: theme.dividerColor),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: colorScheme.primary, width: 2),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: Colors.red, width: 2),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: theme.dividerColor)),
+        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: colorScheme.primary, width: 2)),
+        errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.red, width: 2)),
+        
+        focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Colors.red, width: 2)),
+        disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: theme.disabledColor)),
       ),
     );
   }
 }
+
+

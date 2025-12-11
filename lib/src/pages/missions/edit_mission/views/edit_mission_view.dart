@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart' as intl;
 import '../../../../components/widgets/tag_input/view/smart_tag_input.dart';
 import '../../../../infrastructure/utils/thousands_separator_input_formatter.dart';
 import '../controller/edit_mission_controller.dart';
+import '../../../../../generated/locales.g.dart';
 
 class EditMissionView extends GetView<EditMissionController> {
   const EditMissionView({super.key});
@@ -17,7 +18,7 @@ class EditMissionView extends GetView<EditMissionController> {
     final backgroundBottom = colorScheme.surfaceContainerLowest.withValues(alpha: 0.02);
     final cardColor = colorScheme.surface;
 
-    // If mission has been loaded but budget text isn't formatted yet, apply formatting
+    
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         final m = controller.mission.value;
@@ -36,7 +37,7 @@ class EditMissionView extends GetView<EditMissionController> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('missions_page_edit_title'.tr),
+        title: Text(LocaleKeys.missions_page_edit_title.tr),
         backgroundColor: theme.appBarTheme.backgroundColor ?? colorScheme.primary,
         foregroundColor: theme.appBarTheme.foregroundColor ?? colorScheme.onPrimary,
         elevation: 6,
@@ -74,19 +75,19 @@ class EditMissionView extends GetView<EditMissionController> {
                                 child: Icon(Icons.work_outline, color: colorScheme.tertiary, size: 20),
                               ),
                               const SizedBox(width: 12),
-                              Text('missions_page_edit_header'.tr, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800)),
+                              Text(LocaleKeys.missions_page_edit_header.tr, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800)),
                             ],
                           ),
                           const SizedBox(height: 16),
-                          _sectionTitle('missions_page_section_basic_info'.tr, theme, colorScheme),
+                          _sectionTitle(LocaleKeys.missions_page_section_basic_info.tr, theme, colorScheme),
                           const SizedBox(height: 8),
                           _titleField(theme, colorScheme),
                           const SizedBox(height: 12),
-                          _sectionTitle('missions_page_section_description'.tr, theme, colorScheme),
+                          _sectionTitle(LocaleKeys.missions_page_section_description.tr, theme, colorScheme),
                           const SizedBox(height: 8),
                           _descriptionField(theme, colorScheme),
                           const SizedBox(height: 12),
-                          _sectionTitle('missions_page_section_category'.tr, theme, colorScheme),
+                          _sectionTitle(LocaleKeys.missions_page_section_category.tr, theme, colorScheme),
                           const SizedBox(height: 8),
                           SmartTagInput(
                             controller: controller.categoryController,
@@ -96,7 +97,7 @@ class EditMissionView extends GetView<EditMissionController> {
                             },
                           ),
                           const SizedBox(height: 12),
-                          _sectionTitle('missions_page_section_budget_deadline'.tr, theme, colorScheme),
+                          _sectionTitle(LocaleKeys.missions_page_section_budget_deadline.tr, theme, colorScheme),
                           const SizedBox(height: 8),
                           Row(
                             children: [
@@ -122,7 +123,7 @@ class EditMissionView extends GetView<EditMissionController> {
         foregroundColor: theme.floatingActionButtonTheme.foregroundColor ?? colorScheme.onPrimary,
         child: controller.isLoading.value
             ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: theme.floatingActionButtonTheme.foregroundColor ?? colorScheme.onPrimary, strokeWidth: 2))
-            : Text('missions_page_fab_save'.tr),
+            : Text(LocaleKeys.missions_page_fab_save.tr),
       )),
     );
   }
@@ -151,25 +152,27 @@ class EditMissionView extends GetView<EditMissionController> {
   Widget _titleField(ThemeData theme, ColorScheme colorScheme) => TextFormField(
     controller: controller.titleController,
     validator: controller.validateTitle,
-    decoration: _inputDecoration('missions_page_title_label'.tr, Icons.title, theme, colorScheme),
+    decoration: _inputDecoration(LocaleKeys.missions_page_title_label.tr, Icons.title, theme, colorScheme),
     style: theme.textTheme.bodyLarge,
+    autovalidateMode: AutovalidateMode.onUserInteraction,
   );
 
   Widget _descriptionField(ThemeData theme, ColorScheme colorScheme) => TextFormField(
     controller: controller.descriptionController,
     validator: controller.validateDescription,
     maxLines: 5,
-    decoration: _inputDecoration('missions_page_description_label'.tr, Icons.description, theme, colorScheme),
+    decoration: _inputDecoration(LocaleKeys.missions_page_description_label.tr, Icons.description, theme, colorScheme),
     style: theme.textTheme.bodyMedium,
+    autovalidateMode: AutovalidateMode.onUserInteraction,
   );
 
   Widget _budgetField(ThemeData theme, ColorScheme colorScheme) => Obx(() {
-    // when mission is loaded, ensure the budgetController text is formatted
+    
     try {
       final m = controller.mission.value;
       if (m != null) {
         final current = controller.budgetController.text.trim();
-        // if current doesn't contain a comma but number is present, format it
+        
         if (current.isNotEmpty && !current.contains(',')) {
           try {
             final parsed = int.parse(current.replaceAll(RegExp('[^0-9]'), ''));
@@ -185,8 +188,9 @@ class EditMissionView extends GetView<EditMissionController> {
       validator: controller.validateBudget,
       keyboardType: const TextInputType.numberWithOptions(decimal: false, signed: false),
       inputFormatters: [ThousandsSeparatorInputFormatter(locale: 'en_US')],
-      decoration: _inputDecoration('missions_page_budget_label_create'.tr, Icons.attach_money, theme, colorScheme),
+      decoration: _inputDecoration(LocaleKeys.missions_page_budget_label_create.tr, Icons.attach_money, theme, colorScheme),
       style: theme.textTheme.bodyLarge,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   });
 
@@ -207,8 +211,8 @@ class EditMissionView extends GetView<EditMissionController> {
           Expanded(
             child: Text(
               controller.selectedDeadline.value == null
-                  ? 'missions_page_deadline_select_hint'.tr
-                  : 'missions_page_deadline_label_format'.trParams({'date': intl.DateFormat('yyyy/MM/dd HH:mm').format(controller.selectedDeadline.value!)}),
+                  ? LocaleKeys.missions_page_deadline_select_hint.tr
+                  : LocaleKeys.missions_page_deadline_label_format.trParams({'date': intl.DateFormat('yyyy/MM/dd HH:mm').format(controller.selectedDeadline.value!)}),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
@@ -227,3 +231,5 @@ class EditMissionView extends GetView<EditMissionController> {
     labelStyle: theme.inputDecorationTheme.labelStyle ?? theme.textTheme.bodyMedium,
   );
 }
+
+

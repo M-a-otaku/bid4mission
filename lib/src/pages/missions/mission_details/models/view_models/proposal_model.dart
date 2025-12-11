@@ -1,4 +1,4 @@
-class ProposalsModel {
+﻿class ProposalsModel {
   final String id;
   final String missionId;
   final String hunterId;
@@ -44,3 +44,4 @@ class ProposalsModel {
     );
   }
 }
+

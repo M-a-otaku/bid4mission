@@ -1,4 +1,4 @@
-import 'package:get/get.dart';
+﻿import 'package:get/get.dart';
 import '../controllers/missions_list_controller.dart';
 
 class MissionListBindings extends Bindings {
@@ -7,3 +7,4 @@ class MissionListBindings extends Bindings {
     Get.lazyPut<MissionListController>(() => MissionListController());
   }
 }
+

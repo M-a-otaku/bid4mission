@@ -1,4 +1,4 @@
-import 'package:get/get.dart';
+﻿import 'package:get/get.dart';
 
 import '../controller/create_mission_controller.dart';
 
@@ -12,3 +12,4 @@ class CreateMissionBindings extends Bindings {
     );
   }
 }
+

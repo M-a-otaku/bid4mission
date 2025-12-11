@@ -1,4 +1,4 @@
-class UrlRepository {
+﻿class UrlRepository {
   UrlRepository._();
 
   static const String _baseUrl = 'localhost:3000';
@@ -9,7 +9,7 @@ class UrlRepository {
   static const String _events = '/missions';
   static const String _details = '/details';
 
-  // helper with scheme
+  
   static String get _baseWithScheme => 'http://$_baseUrl';
 
   static Uri login(String username, String password) {
@@ -109,3 +109,5 @@ class UrlRepository {
       Uri.parse('$_baseWithScheme$_events');
 
 }
+
+

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 
@@ -21,7 +21,7 @@ class MissionDetailController extends GetxController {
   late Rx<MissionModel> mission;
   final proposals = <ProposalsModel>[].obs;
 
-  // map hunterId -> username
+  
   final RxMap<String, String> usernames = <String, String>{}.obs;
 
   @override
@@ -37,7 +37,7 @@ class MissionDetailController extends GetxController {
 
     result.fold(
       (error) {
-        Get.snackbar('خطا', error,
+        Get.snackbar('Ø®Ø·Ø§', error,
             backgroundColor: Colors.red, colorText: Colors.white);
         Get.back();
       },
@@ -57,27 +57,27 @@ class MissionDetailController extends GetxController {
 
     result.fold(
       (error) {
-        Get.snackbar('خطا', error,
+        Get.snackbar('Ø®Ø·Ø§', error,
             backgroundColor: Colors.red, colorText: Colors.white);
       },
       (fetchedBids) async {
         proposals.assignAll(fetchedBids);
 
-        // resolve hunter names for unique hunterIds (batch requests)
+        
         final hunterIds = fetchedBids
             .map((b) => b.hunterId)
             .toSet()
             .toList();
 
-        // for each id not in cache, fetch username
+        
         final toFetch = hunterIds.where((id) => !usernames.containsKey(id)).toList();
 
         if (toFetch.isNotEmpty) {
-          // helper to attempt to fix mojibake (UTF-8 decoded as Latin1)
+          
           String fixEncoding(String input) {
             if (input.isEmpty) return '';
-            // simple heuristic for common mojibake characters seen in Persian
-            if (RegExp(r'[ÃÂÙØ]').hasMatch(input)) {
+            
+            if (RegExp(r'[ÃƒÃ‚Ã™Ã˜]').hasMatch(input)) {
               try {
                 final bytes = latin1.encode(input);
                 final fixed = utf8.decode(bytes);
@@ -94,8 +94,8 @@ class MissionDetailController extends GetxController {
             String name = '';
             res.fold((err) => name = '', (n) => name = n);
             name = fixEncoding(name).trim();
-            // debug log to help during development
-            // ignore: avoid_print
+            
+            
             print('[MissionDetail] username for $id => "$name"');
             return MapEntry(id, name);
           }).toList();
@@ -130,7 +130,7 @@ class MissionDetailController extends GetxController {
 
     result.fold(
       (error) {
-        Get.snackbar('خطا', 'انتخاب شکارچی ناموفق بود: $error',
+        Get.snackbar('Ø®Ø·Ø§', 'Ø§Ù†ØªØ®Ø§Ø¨ Ø´Ú©Ø§Ø±Ú†ÛŒ Ù†Ø§Ù…ÙˆÙÙ‚ Ø¨ÙˆØ¯: $error',
             backgroundColor: Colors.red, colorText: Colors.white);
       },
       (_) {
@@ -139,8 +139,8 @@ class MissionDetailController extends GetxController {
         _updateLocalProposals(selectedProposal.id);
 
         Get.snackbar(
-          'موفقیت‌آمیز',
-          'شکارچی $hunterName با موفقیت انتخاب شد و ماموریت آغاز شد',
+          'Ù…ÙˆÙÙ‚ÛŒØªâ€ŒØ¢Ù…ÛŒØ²',
+          'Ø´Ú©Ø§Ø±Ú†ÛŒ $hunterName Ø¨Ø§ Ù…ÙˆÙÙ‚ÛŒØª Ø§Ù†ØªØ®Ø§Ø¨ Ø´Ø¯ Ùˆ Ù…Ø§Ù…ÙˆØ±ÛŒØª Ø¢ØºØ§Ø² Ø´Ø¯',
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
@@ -175,7 +175,7 @@ class MissionDetailController extends GetxController {
 
     final currentProposalId = mission.value.chosenProposalId;
     if (currentProposalId == null || currentProposalId.isEmpty) {
-      Get.snackbar('خطا', 'پیشنهاد انتخاب شده‌ای برای لغو یافت نشد.', backgroundColor: Colors.yellow, colorText: Colors.black);
+      Get.snackbar('Ø®Ø·Ø§', 'Ù¾ÛŒØ´Ù†Ù‡Ø§Ø¯ Ø§Ù†ØªØ®Ø§Ø¨ Ø´Ø¯Ù‡â€ŒØ§ÛŒ Ø¨Ø±Ø§ÛŒ Ù„ØºÙˆ ÛŒØ§ÙØª Ù†Ø´Ø¯.', backgroundColor: Colors.yellow, colorText: Colors.black);
       return;
     }
 
@@ -196,8 +196,8 @@ class MissionDetailController extends GetxController {
 
     result.fold(
           (error) {
-        // مدیریت خطا
-        Get.snackbar('خطا', 'لغو انتخاب شکارچی ناموفق بود: $error',
+        
+        Get.snackbar('Ø®Ø·Ø§', 'Ù„ØºÙˆ Ø§Ù†ØªØ®Ø§Ø¨ Ø´Ú©Ø§Ø±Ú†ÛŒ Ù†Ø§Ù…ÙˆÙÙ‚ Ø¨ÙˆØ¯: $error',
             backgroundColor: Colors.red, colorText: Colors.white);
       },
           (_) {
@@ -205,8 +205,8 @@ class MissionDetailController extends GetxController {
             _cancelLocalProposals(null, currentProposalId);
 
         Get.snackbar(
-          'موفقیت‌آمیز',
-          'انتخاب شکارچی با موفقیت لغو شد. ماموریت اکنون باز است.',
+          'Ù…ÙˆÙÙ‚ÛŒØªâ€ŒØ¢Ù…ÛŒØ²',
+          'Ø§Ù†ØªØ®Ø§Ø¨ Ø´Ú©Ø§Ø±Ú†ÛŒ Ø¨Ø§ Ù…ÙˆÙÙ‚ÛŒØª Ù„ØºÙˆ Ø´Ø¯. Ù…Ø§Ù…ÙˆØ±ÛŒØª Ø§Ú©Ù†ÙˆÙ† Ø¨Ø§Ø² Ø§Ø³Øª.',
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
@@ -237,3 +237,5 @@ class MissionDetailController extends GetxController {
     proposals.assignAll(updatedList);
   }
 }
+
+

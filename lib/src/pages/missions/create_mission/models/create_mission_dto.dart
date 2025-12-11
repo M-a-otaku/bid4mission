@@ -1,4 +1,4 @@
-import '../../../../infrastructure/commons/status.dart';
+﻿import '../../../../infrastructure/commons/status.dart';
 
 class CreateMissionDto {
   final String title;
@@ -30,3 +30,5 @@ class CreateMissionDto {
         'status': statusToString(Status.open),
       };
 }
+
+

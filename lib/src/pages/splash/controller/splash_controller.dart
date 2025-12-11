@@ -1,4 +1,4 @@
-import 'package:get/get.dart';
+﻿import 'package:get/get.dart';
 import '../../../../bid4mission.dart';
 
 class SplashController extends GetxController {
@@ -7,3 +7,4 @@ class SplashController extends GetxController {
     Get.offNamed(RouteNames.login);
   }
 }
+

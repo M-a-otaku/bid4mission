@@ -1,12 +1,10 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import '../commons/local_storage_keys.dart';
 import 'app_colors.dart';
 
 class ThemeService {
   ThemeService._();
-
-  static final _box = GetStorage();
 
   static ThemeMode getThemeMode() {
     try {
@@ -15,13 +13,13 @@ class ThemeService {
       if (stored == null) return ThemeMode.light;
       return stored == 'dark' ? ThemeMode.dark : ThemeMode.light;
     } catch (_) {
-      // If storage isn't ready for some reason, default to light
+      
       return ThemeMode.light;
     }
   }
 
   static Future<void> setThemeMode(ThemeMode mode) async {
-    // Ensure GetStorage initialized before writing.
+    
     try {
       await GetStorage.init();
     } catch (_) {}
@@ -49,9 +47,18 @@ class ThemeService {
         foregroundColor: Colors.white,
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        // use accent in light theme so FAB stands out
+        
         backgroundColor: colorScheme.secondary,
         foregroundColor: colorScheme.onSecondary,
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: colorScheme.surface.withOpacity(0.03),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: colorScheme.onSurface.withOpacity(0.12))),
+        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: colorScheme.primary, width: 2)),
+        errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: Colors.red, width: 2)),
+        focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: Colors.red, width: 2)),
       ),
     );
   }
@@ -81,8 +88,17 @@ class ThemeService {
         foregroundColor: AppColors.darkTextPrimary,
         elevation: 0,
       ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: colorScheme.surface.withOpacity(0.05),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: AppColors.darkDivider)),
+        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: colorScheme.primary, width: 2)),
+        errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: AppColors.error, width: 2)),
+        focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: AppColors.error, width: 2)),
+      ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        // choose a distinct accent for dark theme so change is visible
+        
         backgroundColor: AppColors.darkAccent,
         foregroundColor: AppColors.darkTextPrimary,
       ),
@@ -96,3 +112,5 @@ class ThemeService {
     );
   }
 }
+
+

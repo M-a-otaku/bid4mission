@@ -1,195 +1,42 @@
 {
   "users": [
     {
-      "id": "28c5",
-      "username": "12345678",
-      "firstname": "12345678",
-      "lastname": "12345678",
-      "password": "12345678",
+      "id": "5c6c",
+      "username": "ali",
+      "firstname": "ali",
+      "lastname": "Ali",
+      "password": "@Aali1234",
       "role": "employer"
     },
     {
-      "id": "f9b0",
-      "username": "123456789",
-      "firstname": "123456789",
-      "lastname": "123456789",
-      "password": "123456789",
-      "role": "hunter"
-    },
-    {
-      "id": "92d2",
-      "username": "a",
-      "firstname": "a",
-      "lastname": "a",
+      "id": "6b44",
+      "username": "سشیش",
+      "firstname": "سشیشس",
+      "lastname": "یسیش",
       "password": "12345678",
       "role": "hunter"
     },
     {
-      "id": "709d",
-      "username": "mahdimahdi",
-      "firstname": "مهدی",
-      "lastname": "مهدی پور",
-      "password": "mahdimahdi",
+      "id": "e036",
+      "username": "ma",
+      "firstname": "mahdi",
+      "lastname": "Alinaghipour",
+      "password": "@Aa1234567",
       "role": "employer"
-    },
-    {
-      "id": "c1ee",
-      "username": "m",
-      "firstname": "m",
-      "lastname": "m",
-      "password": "12345678",
-      "role": "hunter"
     }
   ],
   "missions": [
     {
-      "id": "a3dc",
-      "title": "lindz",
-      "description": "fjhsdagfi kjhufgewiRGEUFDKJGFHA VEUI\nیتنلاسیتالبقال ذعشقتلا ذعتباعثابعثصابل ع\nمهدی علینقی",
-      "category": "",
-      "budget": 220000,
-      "deadline": "2025-12-08T21:35:00.000Z",
-      "employerId": "28c5",
-      "chosenProposalId": null,
-      "status": "expired"
-    },
-    {
-      "id": "19f3",
-      "title": "12345",
-      "description": "sfdasfdafzxcvvvvvvvvvvvvvvvvvvvvvvv",
-      "category": "",
-      "budget": 3123123,
-      "deadline": "2025-12-08T20:42:00.000Z",
-      "employerId": "28c5",
-      "chosenProposalId": "33ec",
-      "status": "expired"
-    },
-    {
-      "id": "81ce",
-      "title": "mahdi 2",
-      "description": "222222222222222222222222222222222222222222222222222222222222",
-      "category": "nahdo",
-      "budget": 1234567,
-      "deadline": "2025-12-10T07:42:00.000Z",
-      "employerId": "709d",
-      "chosenProposalId": null,
-      "status": "expired"
-    },
-    {
-      "id": "8bf6",
-      "title": "test 2",
-      "description": "efwaew fg rhgreaht jr jth rtyhaet th",
-      "category": "nahdo",
-      "budget": 200000,
-      "deadline": "2025-12-10T06:50:00.000Z",
-      "employerId": "709d",
-      "chosenProposalId": null,
-      "status": "expired"
-    },
-    {
-      "id": "a640",
-      "title": "madhi 4",
-      "description": "مهدی میگه که باید ئیسنکلذتقبثعالبیس«ءؤ بهثالذ4ا بصهت",
-      "category": "فردا صبح",
-      "budget": 777777,
-      "deadline": "2025-12-11T08:35:00.000Z",
-      "employerId": "709d",
-      "chosenProposalId": "2b8f",
-      "status": "completed"
-    },
-    {
-      "id": "77fc",
-      "title": "علی 4",
-      "description": "میهدذلانتبلعل علع فردا باشه دیگه",
-      "category": "هل ناه",
-      "budget": 200000,
-      "deadline": "2025-12-10T08:36:00.000Z",
-      "employerId": "709d",
-      "chosenProposalId": null,
-      "status": "expired"
-    },
-    {
-      "id": "7d6d",
-      "title": "تست 3÷",
-      "description": "بیدسندتشخگشذتثبلذصثخبذکصعثذبلتلذکرذعثصبذذبتثذبتنذثب",
-      "category": "عاااااااا",
-      "budget": 232322,
-      "deadline": "2025-12-10T10:22:00.000Z",
-      "employerId": "709d",
-      "chosenProposalId": "c8f8",
-      "status": "failed"
-    },
-    {
-      "id": "aebf",
-      "title": "یشیصی",
-      "description": "یشصیشییشییصیش یشصصربب",
-      "category": "نونونون",
-      "budget": 232132,
-      "deadline": "2025-12-13T10:04:00.000Z",
-      "employerId": "709d",
+      "id": "817f",
+      "title": "test 1",
+      "description": "ssbdfaksjdghsgdkjashgdjakshdjhda mahdi",
+      "category": "mahdi",
+      "budget": 223000,
+      "deadline": "2025-12-11T09:19:00.000Z",
+      "employerId": "e036",
       "chosenProposalId": null,
       "status": "open"
-    },
-    {
-      "id": "c608",
-      "title": "112321",
-      "description": "صیی اباد قعتسشتس قضريالر فٍۀٍق",
-      "category": "سلام",
-      "budget": 555555,
-      "deadline": "2025-12-12T10:04:00.000Z",
-      "employerId": "709d",
-      "chosenProposalId": "4ca7",
-      "status": "failed"
     }
   ],
-  "proposals": [
-    {
-      "id": "33ec",
-      "missionId": "19f3",
-      "hunterId": "f9b0",
-      "proposedPrice": 123456,
-      "isAccepted": true,
-      "createdAt": "2025-12-08T20:36:41.751Z"
-    },
-    {
-      "id": "d99e",
-      "missionId": "a3dc",
-      "hunterId": "f9b0",
-      "proposedPrice": 2345678,
-      "isAccepted": false,
-      "createdAt": "2025-12-08T20:36:47.091Z"
-    },
-    {
-      "id": "2b8f",
-      "missionId": "a640",
-      "hunterId": "c1ee",
-      "proposedPrice": 23332,
-      "isAccepted": true,
-      "createdAt": "2025-12-10T08:43:34.283Z"
-    },
-    {
-      "id": "c8f8",
-      "missionId": "7d6d",
-      "hunterId": "c1ee",
-      "proposedPrice": 231233,
-      "isAccepted": true,
-      "createdAt": "2025-12-10T08:47:05.808Z"
-    },
-    {
-      "id": "b2d3",
-      "missionId": "aebf",
-      "hunterId": "c1ee",
-      "proposedPrice": 333333,
-      "isAccepted": false,
-      "createdAt": "2025-12-10T09:05:21.212Z"
-    },
-    {
-      "id": "4ca7",
-      "missionId": "c608",
-      "hunterId": "c1ee",
-      "proposedPrice": 444444,
-      "isAccepted": true,
-      "createdAt": "2025-12-10T09:05:27.331Z"
-    }
-  ]
+  "proposals": []
 }

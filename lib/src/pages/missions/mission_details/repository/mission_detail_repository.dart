@@ -1,4 +1,4 @@
-import 'package:either_dart/either.dart';
+﻿import 'package:either_dart/either.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -25,10 +25,10 @@ class MissionDetailRepository {
         final mission = MissionModel.fromJson(data);
         return Right(mission);
       } else {
-        return Left('خطا در دریافت ماموریت: ${response.statusCode}');
+        return Left('Ø®Ø·Ø§ Ø¯Ø± Ø¯Ø±ÛŒØ§ÙØª Ù…Ø§Ù…ÙˆØ±ÛŒØª: ${response.statusCode}');
       }
     } catch (e) {
-      return Left('خطای شبکه یا سرور: $e');
+      return Left('Ø®Ø·Ø§ÛŒ Ø´Ø¨Ú©Ù‡ ÛŒØ§ Ø³Ø±ÙˆØ±: $e');
     }
   }
 
@@ -51,12 +51,12 @@ class MissionDetailRepository {
 
         return Right(bids);
       } else {
-        final errorMsg = 'خطا در دریافت پیشنهادات: ${response.statusCode}';
+        final errorMsg = 'Ø®Ø·Ø§ Ø¯Ø± Ø¯Ø±ÛŒØ§ÙØª Ù¾ÛŒØ´Ù†Ù‡Ø§Ø¯Ø§Øª: ${response.statusCode}';
         return Left(errorMsg);
       }
     } catch (e) {
       return const Left(
-          'خطای ارتباط با سرور. اتصال اینترنت خود را بررسی کنید.');
+          'Ø®Ø·Ø§ÛŒ Ø§Ø±ØªØ¨Ø§Ø· Ø¨Ø§ Ø³Ø±ÙˆØ±. Ø§ØªØµØ§Ù„ Ø§ÛŒÙ†ØªØ±Ù†Øª Ø®ÙˆØ¯ Ø±Ø§ Ø¨Ø±Ø±Ø³ÛŒ Ú©Ù†ÛŒØ¯.');
     }
   }
 
@@ -76,10 +76,10 @@ class MissionDetailRepository {
       );
 
       if (proposalResponse.statusCode != 200) {
-        return const Left('خطا (۱): به‌روزرسانی وضعیت پیشنهاد ناموفق بود.');
+        return const Left('Ø®Ø·Ø§ (Û±): Ø¨Ù‡â€ŒØ±ÙˆØ²Ø±Ø³Ø§Ù†ÛŒ ÙˆØ¶Ø¹ÛŒØª Ù¾ÛŒØ´Ù†Ù‡Ø§Ø¯ Ù†Ø§Ù…ÙˆÙÙ‚ Ø¨ÙˆØ¯.');
       }
     } catch (e) {
-      return Left('خطای شبکه در به‌روزرسانی پیشنهاد: ${e.toString()}');
+      return Left('Ø®Ø·Ø§ÛŒ Ø´Ø¨Ú©Ù‡ Ø¯Ø± Ø¨Ù‡â€ŒØ±ÙˆØ²Ø±Ø³Ø§Ù†ÛŒ Ù¾ÛŒØ´Ù†Ù‡Ø§Ø¯: ${e.toString()}');
     }
 
     try {
@@ -94,10 +94,10 @@ class MissionDetailRepository {
       if (missionResponse.statusCode == 200) {
         return const Right(true);
       } else {
-        return const Left('خطا (۲): به‌روزرسانی وضعیت ماموریت ناموفق بود.');
+        return const Left('Ø®Ø·Ø§ (Û²): Ø¨Ù‡â€ŒØ±ÙˆØ²Ø±Ø³Ø§Ù†ÛŒ ÙˆØ¶Ø¹ÛŒØª Ù…Ø§Ù…ÙˆØ±ÛŒØª Ù†Ø§Ù…ÙˆÙÙ‚ Ø¨ÙˆØ¯.');
       }
     } catch (e) {
-      return Left('خطای شبکه در به‌روزرسانی ماموریت: ${e.toString()}');
+      return Left('Ø®Ø·Ø§ÛŒ Ø´Ø¨Ú©Ù‡ Ø¯Ø± Ø¨Ù‡â€ŒØ±ÙˆØ²Ø±Ø³Ø§Ù†ÛŒ Ù…Ø§Ù…ÙˆØ±ÛŒØª: ${e.toString()}');
     }
   }
 
@@ -118,10 +118,10 @@ class MissionDetailRepository {
       );
 
       if (proposalResponse.statusCode != 200) {
-        return const Left('خطا (۱): لغو وضعیت پیشنهاد ناموفق بود.');
+        return const Left('Ø®Ø·Ø§ (Û±): Ù„ØºÙˆ ÙˆØ¶Ø¹ÛŒØª Ù¾ÛŒØ´Ù†Ù‡Ø§Ø¯ Ù†Ø§Ù…ÙˆÙÙ‚ Ø¨ÙˆØ¯.');
       }
     } catch (e) {
-      return Left('خطای شبکه در لغو پیشنهاد: ${e.toString()}');
+      return Left('Ø®Ø·Ø§ÛŒ Ø´Ø¨Ú©Ù‡ Ø¯Ø± Ù„ØºÙˆ Ù¾ÛŒØ´Ù†Ù‡Ø§Ø¯: ${e.toString()}');
     }
 
     try {
@@ -136,29 +136,31 @@ class MissionDetailRepository {
       if (missionResponse.statusCode == 200) {
         return const Right(true);
       } else {
-        return const Left('خطا (۲): لغو وضعیت ماموریت ناموفق بود.');
+        return const Left('Ø®Ø·Ø§ (Û²): Ù„ØºÙˆ ÙˆØ¶Ø¹ÛŒØª Ù…Ø§Ù…ÙˆØ±ÛŒØª Ù†Ø§Ù…ÙˆÙÙ‚ Ø¨ÙˆØ¯.');
       }
     } catch (e) {
-      return Left('خطای شبکه در لغو ماموریت: ${e.toString()}');
+      return Left('Ø®Ø·Ø§ÛŒ Ø´Ø¨Ú©Ù‡ Ø¯Ø± Ù„ØºÙˆ Ù…Ø§Ù…ÙˆØ±ÛŒØª: ${e.toString()}');
     }
   }
 
   Future<Either<String, String>> getUsernameById({required String hunterId}) async {
     try {
-      // UrlRepository.getUserById expects int userId
+      
       final url = UrlRepository.getUserById(userId: hunterId);
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final body = utf8.decode(response.bodyBytes);
         final Map<String, dynamic> data = json.decode(body);
-        // assume username field is 'username' or 'name' depending on API
+        
         final username = data['username'];
         return Right(username.toString());
       } else {
-        return Left('خطا در دریافت کاربر: ${response.statusCode}');
+        return Left('Ø®Ø·Ø§ Ø¯Ø± Ø¯Ø±ÛŒØ§ÙØª Ú©Ø§Ø±Ø¨Ø±: ${response.statusCode}');
       }
     } catch (e) {
-      return Left('خطای شبکه در دریافت کاربر: $e');
+      return Left('Ø®Ø·Ø§ÛŒ Ø´Ø¨Ú©Ù‡ Ø¯Ø± Ø¯Ø±ÛŒØ§ÙØª Ú©Ø§Ø±Ø¨Ø±: $e');
     }
   }
 }
+
+

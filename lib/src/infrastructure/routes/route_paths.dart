@@ -1,4 +1,4 @@
-class RoutePaths {
+﻿class RoutePaths {
   static const String splash = "/";
   static const String login = '/login';
   static const String register = '/register';
@@ -14,3 +14,5 @@ class RoutePaths {
   static const String detailsEvent = '/detailsEvent';
   static const String bookmark = '/bookmark';
 }
+
+

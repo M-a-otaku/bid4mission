@@ -1,4 +1,4 @@
-class UpdateProposalDto {
+﻿class UpdateProposalDto {
   final int? proposedPrice;
   final bool? isAccepted;
   final bool? isCompleted;
@@ -17,4 +17,6 @@ class UpdateProposalDto {
     return json;
   }
 }
+
+
 

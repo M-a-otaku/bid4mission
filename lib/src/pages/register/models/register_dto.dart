@@ -1,4 +1,4 @@
-class RegisterDto {
+﻿class RegisterDto {
   final String username;
   final String firstname;
   final String lastname;
@@ -21,3 +21,5 @@ class RegisterDto {
         'role': role,
       };
 }
+
+

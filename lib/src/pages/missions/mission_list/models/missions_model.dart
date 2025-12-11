@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import '../../../../infrastructure/commons/status.dart';
 
 class MissionsModel {
@@ -26,7 +26,7 @@ class MissionsModel {
   });
 
   factory MissionsModel.fromJson(Map<String, dynamic> json) {
-    // Defensive parsing: ensure non-nullable fields get sensible defaults
+    
     final id = json['id']?.toString() ?? '0';
     final title = json['title']?.toString() ?? '';
     final description = json['description']?.toString() ?? '';
@@ -62,3 +62,4 @@ class MissionsModel {
     );
   }
 }
+

@@ -1,4 +1,4 @@
-class UpdateMissionDto {
+﻿class UpdateMissionDto {
   final String? status;
   final String? chosenProposalId;
 
@@ -18,3 +18,4 @@ class UpdateMissionDto {
     return json;
   }
 }
+

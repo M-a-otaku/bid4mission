@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import '../../../../generated/locales.g.dart';
+import '../../../infrastructure/utils/validators.dart' as validators;
 import '../repositories/login_repository.dart';
 import '../../../infrastructure/routes/route_names.dart';
 import '../../../infrastructure/commons/local_storage_keys.dart';
@@ -26,25 +27,11 @@ class LoginController extends GetxController {
   }
 
   String? validatePassword(String? value) {
-    RegExp regex =
-        RegExp(r'^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$');
-    if (value?.trim() != null && value!.trim().isEmpty) {
-      return LocaleKeys.login_page_validate_password.tr;
-    } else {
-      if (!regex.hasMatch(value!)) {
-        return LocaleKeys.login_page_validate_password_min.tr;
-      } else {
-        return null;
-      }
-    }
+    return validators.validatePasswordCommon(value);
   }
 
   String? validateUsername(String? value) {
-    if (value?.trim() != null && value!.trim().isEmpty) {
-      return LocaleKeys.login_page_validate_username.tr;
-    } else {
-      return null;
-    }
+    return validators.validateUsername(value);
   }
 
   Future<void> login() async {
@@ -107,3 +94,5 @@ class LoginController extends GetxController {
     usernameController.dispose();
   }
 }
+
+

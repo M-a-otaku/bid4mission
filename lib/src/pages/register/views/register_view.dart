@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:get/Get.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../../generated/locales.g.dart';
 import '../../../infrastructure/commons/role.dart';
 import '../controllers/register_controller.dart';
@@ -11,379 +11,298 @@ class RegisterView extends GetView<RegisterController> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isTablet = size.width > 600;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      body: Stack(
-        children: [
-          _backgroundGradient(context),
-          _headerAnimated(context),
-          _body(context, size, isTablet),
-        ],
-      ),
-    );
-  }
-
-  Widget _backgroundGradient(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            colorScheme.primary,
-            colorScheme.primaryContainer,
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-    );
-  }
-
-  Widget _headerAnimated(BuildContext context) {
-    return Positioned(
-      top: 90,
-      left: 0,
-      right: 0,
-      child: Column(
-        children: [
-          TweenAnimationBuilder<double>(
-            tween: Tween(begin: -50, end: 0),
-            duration: const Duration(milliseconds: 1250),
-            curve: Curves.easeOutBack,
-            builder: (context, value, child) {
-              return Transform.translate(
-                offset: Offset(0, value),
-                child: Hero(tag: "register_icon", child: _icon(context)),
-              );
-            },
-          ),
-          const SizedBox(height: 18),
-          Text(
-            LocaleKeys.register_page_welcome.tr,
-            style: TextStyle(
-              fontSize: 33,
-              fontWeight: FontWeight.w800,
-              color: Theme.of(context).colorScheme.onPrimary,
-            ),
-          ),
-          Text(
-            LocaleKeys.register_page_information.tr,
-            style: TextStyle(
-              fontSize: 17,
-              color: Theme.of(context).colorScheme.onPrimary.withAlpha(220),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _icon(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Theme.of(context).cardColor.withValues(alpha: 0.95),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.15),
-            blurRadius: 25,
-            offset: const Offset(0, 6),
-          )
-        ],
-      ),
-      child: Icon(
-        Icons.person_add_rounded,
-        size: 55,
-        color: Theme.of(context).colorScheme.primary,
-      ),
-    );
-  }
-
-  Widget _body(BuildContext context, Size size, bool isTablet) {
-    return Form(
-      key: controller.formKey,
-      child: Positioned(
-        bottom: 0,
-        left: 0,
-        right: 0,
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(40),
-            topRight: Radius.circular(40),
-          ),
-          child: Container(
-            width: double.infinity,
-            padding: EdgeInsets.fromLTRB(
-                size.width * 0.07, size.height * 0.12, size.width * 0.07, 40),
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor.withValues(alpha: 0.92),
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(45),
-                topRight: Radius.circular(45),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.07),
-                  blurRadius: 20,
-                  offset: const Offset(0, -2),
-                )
-              ],
-            ),
-            child: Column(
-              children: [
-                _inputCard(context, size, isTablet),
-                const SizedBox(height: 20),
-                _login(context),
-                const SizedBox(height: 30),
-                _registerButton(context),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _inputCard(BuildContext context, Size size, bool isTablet) {
-    return Material(
-      elevation: 9,
-      shadowColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.28),
-      borderRadius: BorderRadius.circular(22),
-      child: Container(
-        padding: const EdgeInsets.all(20),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
         decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(22),
-        ),
-        child: Column(
-          children: [
-            _firstname(context),
-            const SizedBox(height: 16),
-            _lastname(context),
-            const SizedBox(height: 16),
-            _username(context),
-            const SizedBox(height: 16),
-            _password(context),
-            const SizedBox(height: 16),
-            _repeatPassword(context),
-            const SizedBox(height: 16),
-            _roleDropdown(context),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _firstname(BuildContext context) {
-    return Obx(
-      () => TextFormField(
-        controller: controller.firstnameController,
-        readOnly: controller.isLoading.value,
-        validator: (v) {
-          final base = controller.validate(v);
-          if (base != null) return base;
-          if (controller.firstnameError.value.isNotEmpty) return controller.firstnameError.value;
-          return null;
-        },
-        decoration: InputDecoration(
-          labelText: LocaleKeys.register_page_firstname_label.tr,
-          prefixIcon: Icon(Icons.person, color: Theme.of(context).colorScheme.primary),
-          filled: true,
-          fillColor: Theme.of(context).inputDecorationTheme.fillColor ?? Theme.of(context).cardColor.withValues(alpha: 0.35),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [colorScheme.primary, colorScheme.surface],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _lastname(BuildContext context) {
-    return Obx(
-      () => TextFormField(
-        controller: controller.lastnameController,
-        readOnly: controller.isLoading.value,
-        validator: (v) {
-          final base = controller.validate(v);
-          if (base != null) return base;
-          if (controller.lastnameError.value.isNotEmpty) return controller.lastnameError.value;
-          return null;
-        },
-        decoration: InputDecoration(
-          labelText: LocaleKeys.register_page_lastname_label.tr,
-          prefixIcon: Icon(Icons.person, color: Theme.of(context).colorScheme.primary),
-          filled: true,
-          fillColor: Theme.of(context).inputDecorationTheme.fillColor ?? Theme.of(context).cardColor.withValues(alpha: 0.35),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _username(BuildContext context) {
-    return Obx(
-      () => TextFormField(
-        controller: controller.usernameController,
-        readOnly: controller.isLoading.value,
-        validator: (v) {
-          final base = controller.validateUsername(v);
-          if (base != null) return base;
-          if (controller.usernameError.value.isNotEmpty) return controller.usernameError.value;
-          return null;
-        },
-        decoration: InputDecoration(
-          labelText: LocaleKeys.login_page_username.tr,
-          prefixIcon: Icon(Icons.person_outline, color: Theme.of(context).colorScheme.primary),
-          filled: true,
-          fillColor: Theme.of(context).inputDecorationTheme.fillColor ?? Theme.of(context).cardColor.withValues(alpha: 0.35),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _password(BuildContext context) {
-    return Obx(
-      () => TextFormField(
-        controller: controller.passwordController,
-        obscureText: controller.isPasswordVisible.value,
-        readOnly: controller.isLoading.value,
-        validator: (v) {
-          final base = controller.validatePassword(v);
-          if (base != null) return base;
-          if (controller.passwordError.value.isNotEmpty) return controller.passwordError.value;
-          return null;
-        },
-        decoration: InputDecoration(
-          labelText: LocaleKeys.login_page_password.tr,
-          prefixIcon: Icon(Icons.lock_outline, color: Theme.of(context).colorScheme.primary),
-          suffixIcon: IconButton(
-            onPressed: controller.onPressed,
-            icon: Icon(
-              controller.isPasswordVisible.value
-                  ? Icons.visibility
-                  : Icons.visibility_off_outlined,
-            ),
-          ),
-          filled: true,
-          fillColor: Theme.of(context).inputDecorationTheme.fillColor ?? Theme.of(context).cardColor.withValues(alpha: 0.35),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _repeatPassword(BuildContext context) {
-    return Obx(
-      () => TextFormField(
-        controller: controller.repeatPassController,
-        obscureText: controller.isRepeatPasswordVisible.value,
-        readOnly: controller.isLoading.value,
-        validator: controller.validateRepeatPassword,
-        decoration: InputDecoration(
-          labelText: LocaleKeys.register_page_repeat_password.tr,
-          prefixIcon: Icon(Icons.lock_outline, color: Theme.of(context).colorScheme.primary),
-          suffixIcon: IconButton(
-            onPressed: controller.onPressedRepeat,
-            icon: Icon(
-              controller.isRepeatPasswordVisible.value
-                  ? Icons.visibility
-                  : Icons.visibility_off_outlined,
-            ),
-          ),
-          filled: true,
-          fillColor: Theme.of(context).inputDecorationTheme.fillColor ?? Theme.of(context).cardColor.withValues(alpha: 0.35),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _roleDropdown(BuildContext context) {
-    return Obx(
-      () => DropdownButtonFormField<Role>(
-        value: controller.selectedRole.value,
-        validator: (value) => value == null ? LocaleKeys.register_page_role_validator.tr : null,
-        items: [
-          DropdownMenuItem(value: Role.employer, child: Text(LocaleKeys.register_page_role_employer.tr)),
-          DropdownMenuItem(value: Role.hunter, child: Text(LocaleKeys.register_page_role_hunter.tr)),
-        ],
-        onChanged: (value) {
-          if (value != null) controller.selectedRole.value = value;
-        },
-        decoration: InputDecoration(
-          labelText: LocaleKeys.register_page_role_label.tr,
-          prefixIcon: Icon(Icons.work_outline, color: Theme.of(context).colorScheme.primary),
-          filled: true,
-          fillColor: Theme.of(context).inputDecorationTheme.fillColor ?? Theme.of(context).cardColor.withValues(alpha: 0.35),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _login(BuildContext context) {
-    return InkWell(
-      onTap: controller.isLoading.value ? null : Get.back,
-      child: Text(
-        LocaleKeys.register_page_back_login.tr,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black,
-        ),
-      ),
-    );
-  }
-
-  Widget _registerButton(BuildContext context) {
-    return Obx(() => AnimatedContainer(
-          duration: const Duration(milliseconds: 1250),
-          curve: Curves.easeOut,
-          width: double.infinity,
-          height: 55,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: controller.isLoading.value
-                  ? [Colors.grey.shade800, Colors.grey.shade400]
-                  : [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.primaryContainer],
-            ),
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.35),
-                blurRadius: 18,
-                offset: const Offset(0, 6),
-              )
-            ],
-          ),
-          child: InkWell(
-            onTap: controller.isLoading.value ? null : controller.doRegister,
-            borderRadius: BorderRadius.circular(16),
-            child: Center(
-              child: controller.isLoading.value
-                  ? CircularProgressIndicator(color: Theme.of(context).colorScheme.onPrimary)
-                  : Text(
-                      LocaleKeys.register_page_register.tr,
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.onPrimary,
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(
+                horizontal: size.width * 0.08, vertical: 20),
+            child: Form(
+              key: controller.formKey,
+              child: Column(
+                children: [
+                  SizedBox(height: size.height * 0.06),
+                  Hero(
+                    tag: 'register_icon',
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: theme.cardColor,
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 20,
+                              offset: const Offset(0, 10))
+                        ],
                       ),
+                      child: Icon(Icons.person_add_rounded,
+                          size: 60, color: colorScheme.primary),
                     ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(LocaleKeys.register_page_welcome.tr,
+                      style: TextStyle(
+                          fontSize: isTablet ? 36 : 32,
+                          fontWeight: FontWeight.bold,
+                          color: colorScheme.onPrimary)),
+                  const SizedBox(height: 8),
+                  Text(LocaleKeys.register_page_information.tr,
+                      style: TextStyle(
+                          fontSize: isTablet ? 18 : 16,
+                          color: colorScheme.onPrimary.withAlpha(180))),
+                  SizedBox(height: size.height * 0.06),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(isTablet ? 36 : 24),
+                    decoration: BoxDecoration(
+                      color: theme.cardColor,
+                      borderRadius: BorderRadius.circular(28),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 30,
+                            offset: const Offset(0, 10))
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        _textField(
+                          context,
+                          controller: controller.firstnameController,
+                          label: LocaleKeys.register_page_firstname_label.tr,
+                          icon: Icons.person,
+                          validator: (v) {
+                            final base = controller.validateRequired(v);
+                            if (base != null) return base;
+                            if (controller.firstnameError.value.isNotEmpty)
+                              return controller.firstnameError.value;
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        _textField(
+                          context,
+                          controller: controller.lastnameController,
+                          label: LocaleKeys.register_page_lastname_label.tr,
+                          icon: Icons.person,
+                          validator: (v) {
+                            final base = controller.validateRequired(v);
+                            if (base != null) return base;
+                            if (controller.lastnameError.value.isNotEmpty)
+                              return controller.lastnameError.value;
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        _textField(
+                          context,
+                          controller: controller.usernameController,
+                          label: LocaleKeys.login_page_username.tr,
+                          icon: Icons.person_outline,
+                          validator: (v) {
+                            final base = controller.validateUsername(v);
+                            if (base != null) return base;
+                            if (controller.usernameError.value.isNotEmpty)
+                              return controller.usernameError.value;
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        Obx(() => _textField(
+                              context,
+                              controller: controller.passwordController,
+                              label: LocaleKeys.login_page_password.tr,
+                              icon: Icons.lock_outline,
+                              obscureText: controller.isPasswordVisible.value,
+                              validator: (v) {
+                                final base = controller.validatePassword(v);
+                                if (base != null) return base;
+                                if (controller.passwordError.value.isNotEmpty)
+                                  return controller.passwordError.value;
+                                return null;
+                              },
+                              suffix: IconButton(
+                                icon: Icon(
+                                    controller.isPasswordVisible.value
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                    color: colorScheme.primary),
+                                onPressed: controller.togglePasswordVisibility,
+                              ),
+                            )),
+                        const SizedBox(height: 16),
+                        Obx(() => _textField(
+                              context,
+                              controller: controller.repeatPassController,
+                              label:
+                                  LocaleKeys.register_page_repeat_password.tr,
+                              icon: Icons.lock_outline,
+                              obscureText:
+                                  controller.isRepeatPasswordVisible.value,
+                              validator: controller.validateRepeatPassword,
+                              suffix: IconButton(
+                                icon: Icon(
+                                    controller.isRepeatPasswordVisible.value
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                    color: colorScheme.primary),
+                                onPressed:
+                                    controller.toggleRepeatPasswordVisibility,
+                              ),
+                            )),
+                        const SizedBox(height: 16),
+                        Obx(() => DropdownButtonFormField<Role>(
+                              value: controller.selectedRole.value,
+                              validator: (value) => value == null
+                                  ? LocaleKeys.register_page_role_validator.tr
+                                  : null,
+                              items: [
+                                DropdownMenuItem(
+                                    value: Role.employer,
+                                    child: Text(LocaleKeys
+                                        .register_page_role_employer.tr)),
+                                DropdownMenuItem(
+                                    value: Role.hunter,
+                                    child: Text(LocaleKeys
+                                        .register_page_role_hunter.tr)),
+                              ],
+                              onChanged: (value) {
+                                if (value != null)
+                                  controller.selectedRole.value = value;
+                              },
+                              decoration: InputDecoration(
+                                labelText:
+                                    LocaleKeys.register_page_role_label.tr,
+                                prefixIcon: Icon(Icons.work_outline,
+                                    color: colorScheme.primary),
+                                filled: true,
+                                fillColor:
+                                    theme.inputDecorationTheme.fillColor ??
+                                        theme.cardColor.withValues(alpha: 0.35),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                    borderSide: BorderSide.none),
+                              ),
+                            )),
+                        const SizedBox(height: 24),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 56,
+                          child: Obx(() => ElevatedButton(
+                                onPressed: controller.isLoading.value
+                                    ? null
+                                    : controller.doRegister,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: colorScheme.primary,
+                                  foregroundColor: colorScheme.onPrimary,
+                                  elevation: 8,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16)),
+                                  shadowColor:
+                                      colorScheme.primary.withAlpha(128),
+                                ),
+                                child: controller.isLoading.value
+                                    ? SizedBox(
+                                        width: 24,
+                                        height: 24,
+                                        child: CircularProgressIndicator(
+                                            color: colorScheme.onPrimary,
+                                            strokeWidth: 2.5))
+                                    : Text(LocaleKeys.register_page_register.tr,
+                                        style: theme.textTheme.titleMedium
+                                            ?.copyWith(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold)),
+                              )),
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Obx(() => TextButton(
+                                onPressed: controller.isLoading.value
+                                    ? null
+                                    : Get.back,
+                                child: Text(
+                                    LocaleKeys.register_page_back_login.tr,
+                                    style: TextStyle(
+                                        color: colorScheme.primary,
+                                        fontWeight: FontWeight.bold)))),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ));
+        ),
+      ),
+    );
+  }
+
+  Widget _textField(BuildContext context,
+      {required TextEditingController controller,
+      required String label,
+      required IconData icon,
+      bool obscureText = false,
+      String? Function(String?)? validator,
+      Widget? suffix}) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final fillColor = theme.inputDecorationTheme.fillColor ??
+        colorScheme.surfaceContainerLowest.withAlpha(10);
+
+    return TextFormField(
+      controller: controller,
+      obscureText: obscureText,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: validator,
+      readOnly: this.controller.isLoading.value,
+      style: theme.textTheme.bodyLarge?.copyWith(color: colorScheme.onSurface),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: theme.inputDecorationTheme.labelStyle ??
+            TextStyle(color: colorScheme.onSurface),
+        prefixIcon: Icon(icon, color: colorScheme.primary),
+        suffixIcon: suffix,
+        filled: true,
+        fillColor: fillColor,
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide(color: theme.dividerColor)),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide(color: colorScheme.primary, width: 2)),
+        errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: const BorderSide(color: Colors.red, width: 2)),
+        focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: const BorderSide(color: Colors.red, width: 2)),
+        disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide(color: theme.disabledColor)),
+      ),
+    );
   }
 }
+
+

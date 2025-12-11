@@ -1,4 +1,4 @@
-import 'route_paths.dart';
+﻿import 'route_paths.dart';
 
 class RouteNames {
   static const String splash = RoutePaths.splash;
@@ -22,3 +22,5 @@ class RouteNames {
       '${RoutePaths.missions}${RoutePaths.detailsEvent}';
   static const String bookmark = RoutePaths.bookmark;
 }
+
+

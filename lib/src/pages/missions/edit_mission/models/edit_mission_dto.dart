@@ -1,4 +1,4 @@
-
+﻿
 class EditMissionDto {
   final String id;
   final String title;
@@ -30,3 +30,4 @@ class EditMissionDto {
     };
   }
 }
+

@@ -1,4 +1,4 @@
-
+﻿
 import '../../../generated/locales.g.dart';
 
 class LocalizationService {

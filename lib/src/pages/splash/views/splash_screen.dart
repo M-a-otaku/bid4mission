@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -35,7 +35,7 @@ class _SplashPageState extends State<SplashScreen>
     );
 
     _controller.forward();
-    // initialize GetStorage asynchronously and then navigate
+    
     _initAsync();
   }
 
@@ -129,3 +129,5 @@ class _SplashPageState extends State<SplashScreen>
     );
   }
 }
+
+

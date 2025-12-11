@@ -1,4 +1,4 @@
-import 'package:get/get.dart';
+﻿import 'package:get/get.dart';
 import '../controller/mission_detail_controller.dart';
 
 class MissionDetailBinding extends Bindings {
@@ -8,3 +8,4 @@ class MissionDetailBinding extends Bindings {
     Get.lazyPut(() => MissionDetailController(missionId: parameters['id'] ?? ''));
   }
 }
+

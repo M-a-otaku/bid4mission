@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import '../../../../infrastructure/commons/status.dart';
 
 class MissionModel {
@@ -35,3 +35,4 @@ class MissionModel {
     );
   }
 }
+

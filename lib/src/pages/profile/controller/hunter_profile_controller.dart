@@ -1,4 +1,4 @@
-import 'package:get/get.dart';
+﻿import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 import '../../../infrastructure/commons/status.dart';
@@ -16,22 +16,22 @@ class HunterProfileController extends GetxController {
 
   var isLoading = false.obs;
   var proposals = <ProposalProfileModel>[].obs;
-  // Locally tracked proposal states to keep UI consistent until server reflects changes
-  final RxSet<String> _locallyPendingApproval = <String>{}.obs; // proposal ids marked as pending by hunter
-  final RxSet<String> _locallyFailedProposals = <String>{}.obs; // proposal ids marked as failure by hunter
-  // cached categorized lists to ensure mutual exclusivity (recomputed on proposals changes)
+  
+  final RxSet<String> _locallyPendingApproval = <String>{}.obs; 
+  final RxSet<String> _locallyFailedProposals = <String>{}.obs; 
+  
   List<ProposalProfileModel> _cachedConfirmed = [];
   List<ProposalProfileModel> _cachedFailed = [];
   List<ProposalProfileModel> _cachedAwaiting = [];
   List<ProposalProfileModel> _cachedActive = [];
   List<ProposalProfileModel> _cachedHistory = [];
-  // currently selected filter key (stored in controller so it survives widget rebuilds)
+  
   final RxString selectedFilter = 'all'.obs;
 
-  // Return plain Lists computed from the reactive `proposals` list.
-  // We compute mutually-exclusive lists by priority to avoid duplicates across sections:
-  // priority: confirmed -> failed -> awaiting -> active -> history
-  // Expose cached lists (read-only) to the view
+  
+  
+  
+  
   List<ProposalProfileModel> get confirmedRequests => List.unmodifiable(_cachedConfirmed);
   List<ProposalProfileModel> get failedRequestsCombined => List.unmodifiable(_cachedFailed);
   List<ProposalProfileModel> get awaitingApprovalCombined => List.unmodifiable(_cachedAwaiting);
@@ -42,11 +42,11 @@ class HunterProfileController extends GetxController {
   void onInit() {
     super.onInit();
     loadHunterProposals();
-    // recompute categories whenever proposals change
+    
     ever(proposals, (_) => _recomputeCategories());
   }
 
-  /// Apply a named filter key from the UI (ChoiceChips) and fetch appropriate proposals.
+  
   Future<void> applyFilterKey(String key) async {
     selectedFilter.value = key;
     switch (key) {
@@ -54,11 +54,11 @@ class HunterProfileController extends GetxController {
         await loadHunterProposalsFiltered(isAccepted: true, isCompleted: false);
         break;
       case 'awaiting':
-        // fetch all and rely on controller's awaitingApprovalCombined to select pending approvals
+        
         await loadHunterProposals();
         break;
       case 'failed':
-        // fetch all and let the view use failedRequests getter to display only failed items
+        
         await loadHunterProposals();
         break;
       case 'confirmed':
@@ -74,7 +74,7 @@ class HunterProfileController extends GetxController {
     }
   }
 
-  /// Load proposals with optional server-side filter flags.
+  
   Future<void> loadHunterProposalsFiltered({bool? isAccepted, bool? isCompleted}) async {
     isLoading(true);
     final result = await _repository.getAllHunterProposals(
@@ -85,17 +85,17 @@ class HunterProfileController extends GetxController {
 
     result.fold(
       (error) {
-        Get.snackbar('خطا', error, backgroundColor: Colors.red, colorText: Colors.white);
+        Get.snackbar('Ø®Ø·Ø§', error, backgroundColor: Colors.red, colorText: Colors.white);
       },
       (fetchedProposals) {
-        // assign and normalize statuses locally
+        
         var normalized = _normalizeProposals(fetchedProposals);
-        // reconcile and clear local overlays where server already applied the change
+        
         _reconcileLocalFlags(normalized);
-        // overlay remaining local state (if user recently marked completion/failure but server not updated yet)
+        
         normalized = _applyLocalFlags(normalized);
         proposals.assignAll(normalized);
-        // persist any needed status changes (accepted proposals whose deadline passed)
+        
         _autoFailExpiredAcceptedProposals(normalized);
       },
     );
@@ -109,14 +109,14 @@ class HunterProfileController extends GetxController {
 
     result.fold(
       (error) {
-        Get.snackbar('خطا', error, backgroundColor: Colors.red, colorText: Colors.white);
+        Get.snackbar('Ø®Ø·Ø§', error, backgroundColor: Colors.red, colorText: Colors.white);
       },
       (fetchedProposals) {
         var normalized = _normalizeProposals(fetchedProposals);
         _reconcileLocalFlags(normalized);
         normalized = _applyLocalFlags(normalized);
         proposals.assignAll(normalized);
-        // ensure server reflects expired accepted proposals
+        
         _autoFailExpiredAcceptedProposals(normalized);
       },
     );
@@ -124,12 +124,12 @@ class HunterProfileController extends GetxController {
     isLoading(false);
   }
 
-  /// Normalize proposals after loading: if a proposal is accepted and its mission deadline passed,
-  /// mark the mission status as failed locally so the UI reflects a failed request.
+  
+  
   List<ProposalProfileModel> _normalizeProposals(List<ProposalProfileModel> list) {
     final now = DateTime.now();
     return list.map((p) {
-      // If server already marked this mission as pending approval, treat proposal as completed locally
+      
       try {
         if (p.mission != null && p.mission!.status == Status.pendingApproval) {
           try {
@@ -139,7 +139,7 @@ class HunterProfileController extends GetxController {
         }
       } catch (_) {}
 
-      // If accepted but deadline passed, show mission as failed locally
+      
       try {
         if (p.isAccepted && p.mission != null) {
           final m = p.mission!;
@@ -163,8 +163,8 @@ class HunterProfileController extends GetxController {
     }).toList();
   }
 
-  /// For any proposal that is accepted and whose mission deadline passed,
-  /// persist mission.status = failed on server and update local list.
+  
+  
   Future<void> _autoFailExpiredAcceptedProposals(List<ProposalProfileModel> list) async {
     final now = DateTime.now();
     final List<String> toUpdate = [];
@@ -188,7 +188,7 @@ class HunterProfileController extends GetxController {
           Get.log('Failed to auto-mark mission $missionId as failed: $err');
         } catch (_) {}
       }, (_) {
-        // update local proposals referencing this mission
+        
         final updated = proposals.map((p) {
           if (p.mission != null && p.mission!.id == missionId) {
             final m = p.mission!;
@@ -211,9 +211,9 @@ class HunterProfileController extends GetxController {
     }
   }
 
-  // =======================================================
-  // متد اعلام اتمام و موفقیت
-  // =======================================================
+  
+  
+  
   Future<void> requestCompletion(ProposalProfileModel proposal) async {
     if (!proposal.isAccepted || proposal.isCompleted) return;
 
@@ -223,22 +223,22 @@ class HunterProfileController extends GetxController {
       missionId: proposal.missionId,
     );
 
-    Get.back(); // بستن دیالوگ لودینگ
+    Get.back(); 
 
     result.fold(
       (error) {
-        Get.snackbar('خطا', 'اعلام اتمام ماموریت ناموفق بود: $error', backgroundColor: Colors.red, colorText: Colors.white);
+        Get.snackbar('Ø®Ø·Ø§', 'Ø§Ø¹Ù„Ø§Ù… Ø§ØªÙ…Ø§Ù… Ù…Ø§Ù…ÙˆØ±ÛŒØª Ù†Ø§Ù…ÙˆÙÙ‚ Ø¨ÙˆØ¯: $error', backgroundColor: Colors.red, colorText: Colors.white);
       },
       (_) async {
-        // remember locally so UI hides actions immediately and across refresh
+        
         _locallyPendingApproval.add(proposal.id);
         _updateLocalMissionStatusToPending(proposal.id);
-        // refresh from server to get authoritative state, but preserve local overlays
+        
         await loadHunterProposals();
 
         Get.snackbar(
-          'درخواست ارسال شد',
-          'درخواست اتمام ماموریت ارسال شد و در انتظار تأیید کارفرما است.',
+          'Ø¯Ø±Ø®ÙˆØ§Ø³Øª Ø§Ø±Ø³Ø§Ù„ Ø´Ø¯',
+          'Ø¯Ø±Ø®ÙˆØ§Ø³Øª Ø§ØªÙ…Ø§Ù… Ù…Ø§Ù…ÙˆØ±ÛŒØª Ø§Ø±Ø³Ø§Ù„ Ø´Ø¯ Ùˆ Ø¯Ø± Ø§Ù†ØªØ¸Ø§Ø± ØªØ£ÛŒÛŒØ¯ Ú©Ø§Ø±ÙØ±Ù…Ø§ Ø§Ø³Øª.',
           backgroundColor: Colors.green,
           colorText: Colors.white,
         );
@@ -246,9 +246,9 @@ class HunterProfileController extends GetxController {
     );
   }
 
-  // ===================== اعلام شکست =====================
+  
   Future<void> requestFailure(ProposalProfileModel proposal) async {
-    // If already completed/failed/awaiting, nothing to do
+    
     if (proposal.isCompleted || (proposal.mission?.status != null && proposal.mission!.status == Status.failed)) return;
 
     Get.dialog(const Center(child: CircularProgressIndicator()));
@@ -257,20 +257,20 @@ class HunterProfileController extends GetxController {
       missionId: proposal.missionId,
     );
 
-    Get.back(); // close loading
+    Get.back(); 
 
     result.fold((error) {
-      Get.snackbar('خطا', 'اعلام شکست ماموریت ناموفق بود: $error', backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar('Ø®Ø·Ø§', 'Ø§Ø¹Ù„Ø§Ù… Ø´Ú©Ø³Øª Ù…Ø§Ù…ÙˆØ±ÛŒØª Ù†Ø§Ù…ÙˆÙÙ‚ Ø¨ÙˆØ¯: $error', backgroundColor: Colors.red, colorText: Colors.white);
     }, (_) async {
-      // remember locally
+      
       _locallyFailedProposals.add(proposal.id);
       _updateLocalMissionStatusToFailure(proposal.id);
-      // refresh from server to get authoritative state
+      
       await loadHunterProposals();
 
       Get.snackbar(
-        'درخواست ارسال شد',
-        'درخواست اعلام شکست ماموریت ارسال شد و در انتظار تأیید کارفرما است.',
+        'Ø¯Ø±Ø®ÙˆØ§Ø³Øª Ø§Ø±Ø³Ø§Ù„ Ø´Ø¯',
+        'Ø¯Ø±Ø®ÙˆØ§Ø³Øª Ø§Ø¹Ù„Ø§Ù… Ø´Ú©Ø³Øª Ù…Ø§Ù…ÙˆØ±ÛŒØª Ø§Ø±Ø³Ø§Ù„ Ø´Ø¯ Ùˆ Ø¯Ø± Ø§Ù†ØªØ¸Ø§Ø± ØªØ£ÛŒÛŒØ¯ Ú©Ø§Ø±ÙØ±Ù…Ø§ Ø§Ø³Øª.',
         backgroundColor: Colors.orange,
         colorText: Colors.white,
       );
@@ -292,7 +292,7 @@ class HunterProfileController extends GetxController {
             status: Status.pendingApproval,
             employerId: m.employerId,
           );
-          // mark proposal as completed (hunter signaled completion) so UI hides action buttons
+          
           return p.copyWith(mission: updatedMission, isCompleted: true);
         }
       }
@@ -317,7 +317,7 @@ class HunterProfileController extends GetxController {
             status: Status.failed,
             employerId: m.employerId,
           );
-          // mark proposal as completed/handled so actions are hidden
+          
           return p.copyWith(mission: updatedMission, isCompleted: true);
         }
       }
@@ -327,12 +327,12 @@ class HunterProfileController extends GetxController {
     proposals.assignAll(updatedList);
   }
 
-  // ================== Edit & Delete proposals (for non-accepted proposals) ==================
+  
   Future<void> editProposal({required String proposalId, required int newPrice}) async {
     final idx = proposals.indexWhere((p) => p.id == proposalId);
     if (idx == -1) return;
     final proposal = proposals[idx];
-    if (proposal.isAccepted) return; // cannot edit an accepted proposal
+    if (proposal.isAccepted) return; 
 
     Get.dialog(const Center(child: CircularProgressIndicator()));
     final dto = UpdateProposalDto(proposedPrice: newPrice);
@@ -340,14 +340,14 @@ class HunterProfileController extends GetxController {
     Get.back();
 
     result.fold((err) {
-      Get.snackbar('خطا', err, backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar('Ø®Ø·Ø§', err, backgroundColor: Colors.red, colorText: Colors.white);
     }, (_) {
       final updated = proposals.map((p) {
         if (p.id == proposalId) return p.copyWith(proposedPrice: newPrice);
         return p;
       }).toList();
       proposals.assignAll(updated);
-      Get.snackbar('موفقیت', 'قیمت پیشنهاد به‌روزرسانی شد', backgroundColor: Colors.green, colorText: Colors.white);
+      Get.snackbar('Ù…ÙˆÙÙ‚ÛŒØª', 'Ù‚ÛŒÙ…Øª Ù¾ÛŒØ´Ù†Ù‡Ø§Ø¯ Ø¨Ù‡â€ŒØ±ÙˆØ²Ø±Ø³Ø§Ù†ÛŒ Ø´Ø¯', backgroundColor: Colors.green, colorText: Colors.white);
     });
   }
 
@@ -355,25 +355,25 @@ class HunterProfileController extends GetxController {
     final idx = proposals.indexWhere((p) => p.id == proposalId);
     if (idx == -1) return;
     final proposal = proposals[idx];
-    if (proposal.isAccepted) return; // cannot delete an accepted proposal
+    if (proposal.isAccepted) return; 
 
     Get.dialog(const Center(child: CircularProgressIndicator()));
     final result = await _repository.deleteProposal(proposalId: proposalId);
     Get.back();
 
     result.fold((err) {
-      Get.snackbar('خطا', err, backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar('Ø®Ø·Ø§', err, backgroundColor: Colors.red, colorText: Colors.white);
     }, (_) {
       proposals.removeWhere((p) => p.id == proposalId);
-      Get.snackbar('موفقیت', 'پیشنهاد حذف شد', backgroundColor: Colors.green, colorText: Colors.white);
+      Get.snackbar('Ù…ÙˆÙÙ‚ÛŒØª', 'Ù¾ÛŒØ´Ù†Ù‡Ø§Ø¯ Ø­Ø°Ù Ø´Ø¯', backgroundColor: Colors.green, colorText: Colors.white);
     });
   }
 
-  // insert helper to apply local flags
+  
   List<ProposalProfileModel> _applyLocalFlags(List<ProposalProfileModel> list) {
     return list.map((p) {
       if (_locallyPendingApproval.contains(p.id)) {
-        // ensure it's marked completed locally and mission pendingApproval
+        
         final m = p.mission;
         final updatedMission = m != null
             ? edit_mission_model.MissionModel(id: m.id, title: m.title, description: m.description, category: m.category, budget: m.budget, deadline: m.deadline, status: Status.pendingApproval, employerId: m.employerId)
@@ -391,9 +391,9 @@ class HunterProfileController extends GetxController {
     }).toList();
   }
 
-  /// Remove recovered ids from local overlay sets when server state shows the change was applied.
+  
   void _reconcileLocalFlags(List<ProposalProfileModel> list) {
-    // remove pendingApproval flags if server shows p.isCompleted==true and mission.status==pendingApproval
+    
     final pendingToRemove = <String>[];
     final failedToRemove = <String>[];
     for (final p in list) {
@@ -401,7 +401,7 @@ class HunterProfileController extends GetxController {
         if (_locallyPendingApproval.contains(p.id)) {
           if (p.mission != null) {
             final s = p.mission!.status;
-            // remove local pending if server shows pendingApproval (applied) or already completed/failed
+            
             if (s == Status.pendingApproval || s == Status.completed || s == Status.failed) {
               pendingToRemove.add(p.id);
             }
@@ -420,7 +420,7 @@ class HunterProfileController extends GetxController {
     if (failedToRemove.isNotEmpty) _locallyFailedProposals.removeAll(failedToRemove);
   }
 
-  // Recompute categorized lists in a single pass to guarantee mutual exclusivity
+  
   void _recomputeCategories() {
     final confirmed = <ProposalProfileModel>[];
     final failed = <ProposalProfileModel>[];
@@ -431,12 +431,12 @@ class HunterProfileController extends GetxController {
     for (final p in proposals) {
       final missionStatus = p.mission?.status;
 
-      // Debug log: show key fields before decision
+      
       try {
         Get.log('[HunterProfileController] Categorizing proposal=${p.id} missionStatus=${missionStatus?.toString() ?? 'null'} isAccepted=${p.isAccepted} isCompleted=${p.isCompleted}');
       } catch (_) {}
 
-      // confirmed if server says completed AND this proposal was the chosen/accepted one
+      
       if (missionStatus != null && missionStatus == Status.completed && p.isAccepted) {
         try {
           Get.log('[HunterProfileController] -> confirmed: ${p.id}');
@@ -445,7 +445,7 @@ class HunterProfileController extends GetxController {
         continue;
       }
 
-      // failed if server says failed or locally flagged failed
+      
       if ((missionStatus != null && missionStatus == Status.failed) || _locallyFailedProposals.contains(p.id)) {
         try {
           Get.log('[HunterProfileController] -> failed: ${p.id}');
@@ -454,7 +454,7 @@ class HunterProfileController extends GetxController {
         continue;
       }
 
-      // awaiting if server says pendingApproval and this proposal was accepted OR locally pending
+      
       if (((missionStatus != null && missionStatus == Status.pendingApproval) && p.isAccepted) || _locallyPendingApproval.contains(p.id)) {
         try {
           Get.log('[HunterProfileController] -> awaiting: ${p.id} (serverPending=${missionStatus == Status.pendingApproval}, localPending=${_locallyPendingApproval.contains(p.id)})');
@@ -463,9 +463,9 @@ class HunterProfileController extends GetxController {
         continue;
       }
 
-      // active: accepted and not completed and not in prior categories
+      
       if (p.isAccepted && !p.isCompleted) {
-        // if mission status indicates active (not failed/expired/completed/pending)
+        
         if (missionStatus == null || !(missionStatus.isFailed || missionStatus.isExpired || missionStatus.isCompleted || missionStatus.isPendingApproval)) {
           try {
             Get.log('[HunterProfileController] -> active: ${p.id}');
@@ -475,7 +475,7 @@ class HunterProfileController extends GetxController {
         }
       }
 
-      // otherwise history
+      
       try {
         Get.log('[HunterProfileController] -> history: ${p.id}');
       } catch (_) {}
@@ -490,3 +490,5 @@ class HunterProfileController extends GetxController {
   }
 
 }
+
+

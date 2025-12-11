@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get/Get.dart';
 import 'package:get_storage/get_storage.dart';
 import '../../../../../bid4mission.dart';
@@ -20,22 +20,20 @@ class MissionListController extends GetxController {
   RxList<MissionsModel> missions = <MissionsModel>[].obs;
   RxBool isLoading = true.obs;
   RxString error = ''.obs;
-  // track mission ids currently being processed (to disable UI actions)
+
   RxList<String> processingMissionIds = <String>[].obs;
 
   String userId = "0";
   Role? role;
   RxBool isUserLoaded = false.obs;
 
-  // fallback when role not yet loaded
   Role get roleOrDefault => role ?? Role.hunter;
 
-  // search & filters
   final TextEditingController searchController = TextEditingController();
   RxString searchQuery = ''.obs;
   RxList<String> searchSuggestions = <String>[].obs;
 
-  RxList<String> categories = <String>[].obs; // loaded from server
+  RxList<String> categories = <String>[].obs;
   RxList<String> selectedCategories = <String>[].obs;
 
   RxInt? minBudget = RxInt(0);
@@ -43,51 +41,34 @@ class MissionListController extends GetxController {
 
   RxList<String> selectedStatuses = <String>[].obs;
 
-  // Global budget bounds (fetched from server) used to configure the filter slider
   RxInt globalMinBudget = 0.obs;
   RxInt globalMaxBudget = 1000.obs;
-  // Whether the budget filter is enabled (affects apply behavior)
+
   RxBool isBudgetFilterEnabled = false.obs;
 
-  // sort: 'asc'/'desc'/null
   RxString sortByDate = RxString('asc');
 
-  // theme
   Rx<ThemeMode> themeMode = Rx<ThemeMode>(ThemeMode.light);
 
   @override
   void onInit() {
-    // Start loading and do async initialization to avoid performing
-    // navigation or widget rebuilds during the build phase (hot reload
-    // / hot restart issue).
     isLoading(true);
     _initController();
     super.onInit();
   }
 
-  // Async initializer: loads stored user/role, sets up debounce, theme and
-  // fetches initial data. This avoids calling Get.offAllNamed during the
-  // synchronous build phase which caused "setState() or markNeedsBuild() called during build".
   Future<void> _initController() async {
     try {
       await _loadUserFromStorage();
 
-      // load theme mode from storage
       themeMode.value = ThemeService.getThemeMode();
-      // Defer theme change until after first frame
+
       WidgetsBinding.instance.addPostFrameCallback((_) {
         try {
           Get.changeThemeMode(themeMode.value);
         } catch (_) {}
       });
 
-      // Do NOT force navigation to login here. Hot reload / restart will
-      // re-run onInit and if storage isn't immediately available this
-      // caused forced navigation. Keep the current page; navigation should
-      // happen only on explicit logout or when the app determines there's
-      // no authenticated user elsewhere.
-
-      // Debounce search: only trigger when user pauses typing
       debounce(searchQuery, (_) {
         if (searchQuery.value.trim().length >= 2) {
           fetchMissions();
@@ -99,48 +80,43 @@ class MissionListController extends GetxController {
       }, time: const Duration(milliseconds: 600));
 
       await fetchCategories();
-      // load global budget range from server (used by the filter slider)
+
       await loadGlobalBudgetRange();
       await fetchMissions();
     } catch (e) {
-      // ensure loading flag is reset on error
       isLoading.value = false;
       error.value = e.toString();
     }
   }
 
   Future<void> _loadUserFromStorage() async {
-    // Ensure GetStorage is initialized (idempotent). This avoids race conditions
-    // where storage isn't ready during hot reload/hot restart.
     await GetStorage.init();
     final storage = GetStorage();
-    // Safely read values from storage and provide defaults
+
     final dynamic storedUserId = storage.read(LocalStorageKeys.userId);
     userId = storedUserId == null ? '0' : storedUserId.toString();
 
     final dynamic storedRole = storage.read(LocalStorageKeys.role);
     if (storedRole != null) {
       final raw = storedRole.toString();
-      // debug log stored role value
-      try { Get.log('Stored role read from GetStorage: $raw'); } catch (_) {}
+
       role = parseRole(raw);
     }
-    // mark that we've loaded stored user/role so UI can render based on it
+
     isUserLoaded.value = true;
   }
 
   Future<void> fetchCategories() async {
     try {
-      final list = await SmartCategoryService.getAllCategories();
+      final list = await _repository.getAllCategories();
       categories.value = list;
-    } catch (_) {
-      // ignore, categories optional
-    }
+    } catch (_) {}
   }
 
   Future<void> _loadSearchSuggestions(String query) async {
     try {
-      final result = await _repository.getMissions(userId, roleToString(roleOrDefault), search: query);
+      final result = await _repository
+          .getMissions(userId, roleToString(roleOrDefault), search: query);
       result.fold((err) => null, (data) {
         final titles = data.map((m) => m.title).toSet().toList();
         searchSuggestions.value = titles;
@@ -152,16 +128,15 @@ class MissionListController extends GetxController {
     isLoading.value = true;
     error.value = '';
 
-    final String? search = searchQuery.value.trim().isEmpty ? null : searchQuery.value.trim();
-    final List<String>? cats = selectedCategories.isEmpty ? null : selectedCategories.toList();
+    final String? search =
+        searchQuery.value.trim().isEmpty ? null : searchQuery.value.trim();
+    final List<String>? cats =
+        selectedCategories.isEmpty ? null : selectedCategories.toList();
     final int? minB = (minBudget?.value ?? 0) == 0 ? null : minBudget?.value;
     final int? maxB = (maxBudget?.value ?? 0) == 0 ? null : maxBudget?.value;
-    final List<String>? statuses = selectedStatuses.isEmpty ? null : selectedStatuses.toList();
+    final List<String>? statuses =
+        selectedStatuses.isEmpty ? null : selectedStatuses.toList();
     final String? sort = sortByDate.value == '' ? null : sortByDate.value;
-
-    try {
-      Get.log('Fetching missions: userId=$userId role=${roleToString(roleOrDefault)} search=$search categories=$cats minB=$minB maxB=$maxB statuses=$statuses sort=$sort');
-    } catch (_) {}
 
     final result = await _repository.getMissions(
         userId, roleToString(roleOrDefault),
@@ -178,9 +153,13 @@ class MissionListController extends GetxController {
     );
 
     if (error.value.isNotEmpty) {
-      try { Get.log('fetchMissions error: ${error.value}'); } catch(_){ }
+      try {
+        Get.log('fetchMissions error: ${error.value}');
+      } catch (_) {}
     } else {
-      try { Get.log('fetchMissions success count=${missions.length}'); } catch(_){ }
+      try {
+        Get.log('fetchMissions success count=${missions.length}');
+      } catch (_) {}
     }
 
     isLoading.value = false;
@@ -188,7 +167,8 @@ class MissionListController extends GetxController {
 
   void setSearch(String value) {
     searchController.text = value;
-    searchController.selection = TextSelection.fromPosition(TextPosition(offset: value.length));
+    searchController.selection =
+        TextSelection.fromPosition(TextPosition(offset: value.length));
     searchQuery.value = value;
     searchSuggestions.clear();
     fetchMissions();
@@ -253,12 +233,11 @@ class MissionListController extends GetxController {
       fetchMissions();
     }
   }
+
   Future<void> toProfile({required String hunterId}) async {
     await Get.toNamed(RouteNames.profile, parameters: {"id": hunterId});
   }
 
-  // --------------------- View helper logic ---------------------
-  // Move small helper utilities here so views remain thin.
   String fmtInt(int value) {
     final s = value.toString();
     return s.replaceAllMapped(RegExp(r"\B(?=(\d{3})+(?!\d))"), (m) => ',');
@@ -266,7 +245,7 @@ class MissionListController extends GetxController {
 
   String formatCurrency(dynamic b) {
     final intVal = int.tryParse(b?.toString() ?? '') ?? 0;
-    return '${fmtInt(intVal)} تومان';
+    return '${fmtInt(intVal)} ${LocaleKeys.currency_toman.tr}';
   }
 
   String displayStatus(Status status) {
@@ -295,20 +274,22 @@ class MissionListController extends GetxController {
     ];
   }
 
-  // Employer confirms mission completed (called when status == pendingApproval)
-  Future<void> confirmMissionCompletion({required MissionsModel mission}) async {
+  Future<void> confirmMissionCompletion(
+      {required MissionsModel mission}) async {
     if (!mission.status.isPendingApproval) return;
 
     if (processingMissionIds.contains(mission.id)) return;
     processingMissionIds.add(mission.id);
-    Get.dialog(const Center(child: CircularProgressIndicator()), barrierDismissible: false);
-    final result = await _repository.updateMissionStatus(missionId: mission.id, status: Status.completed);
+    Get.dialog(const Center(child: CircularProgressIndicator()),
+        barrierDismissible: false);
+    final result = await _repository.updateMissionStatus(
+        missionId: mission.id, status: Status.completed);
     Get.back();
 
     result.fold((err) {
-      Get.snackbar('خطا', err, backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar(LocaleKeys.common_error.tr, err,
+          backgroundColor: Colors.red, colorText: Colors.white);
     }, (_) {
-      // update local list
       final updated = missions.map((m) {
         if (m.id == mission.id) {
           return MissionsModel(
@@ -326,24 +307,28 @@ class MissionListController extends GetxController {
         return m;
       }).toList();
       missions.assignAll(updated);
-      Get.snackbar('تأیید شد', 'وضعیت ماموریت به "تکمیل‌شده" تغییر کرد', backgroundColor: Colors.green, colorText: Colors.white);
+      Get.snackbar(LocaleKeys.missions_page_confirm_done_title.tr,
+          LocaleKeys.missions_page_confirm_done_message.tr,
+          backgroundColor: Colors.green, colorText: Colors.white);
     });
-    // ensure removal from processing regardless of result
+
     processingMissionIds.remove(mission.id);
   }
 
-  // Employer rejects hunter's completion request and marks mission as failed
   Future<void> rejectMission({required MissionsModel mission}) async {
     if (!mission.status.isPendingApproval) return;
 
     if (processingMissionIds.contains(mission.id)) return;
     processingMissionIds.add(mission.id);
-    Get.dialog(const Center(child: CircularProgressIndicator()), barrierDismissible: false);
-    final result = await _repository.updateMissionStatus(missionId: mission.id, status: Status.failed);
+    Get.dialog(const Center(child: CircularProgressIndicator()),
+        barrierDismissible: false);
+    final result = await _repository.updateMissionStatus(
+        missionId: mission.id, status: Status.failed);
     Get.back();
 
     result.fold((err) {
-      Get.snackbar('خطا', err, backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar(LocaleKeys.common_error.tr, err,
+          backgroundColor: Colors.red, colorText: Colors.white);
     }, (_) {
       final updated = missions.map((m) {
         if (m.id == mission.id) {
@@ -362,42 +347,48 @@ class MissionListController extends GetxController {
         return m;
       }).toList();
       missions.assignAll(updated);
-      Get.snackbar('انجام شد', 'ماموریت به عنوان "شکست‌خورده" علامت‌گذاری شد', backgroundColor: Colors.orange, colorText: Colors.white);
+      Get.snackbar(LocaleKeys.missions_page_reject_done_title.tr,
+          LocaleKeys.missions_page_reject_done_message.tr,
+          backgroundColor: Colors.orange, colorText: Colors.white);
     });
-    // ensure removal from processing regardless of result
+
     processingMissionIds.remove(mission.id);
   }
 
-  /// Delete an open mission (only allowed for employer who owns it)
   Future<void> deleteMission({required MissionsModel mission}) async {
-    // Only allow deletion of open missions
     if (!mission.status.isOpen) return;
 
-    // prevent duplicate clicks
     if (processingMissionIds.contains(mission.id)) return;
 
     final confirm = await Get.dialog<bool>(AlertDialog(
-      title: Text(LocaleKeys.missions_page_mission_not_requestable_title.tr),
-      content: Text('آیا از حذف این ماموریت اطمینان دارید؟'),
+      title: Text(LocaleKeys.missions_page_delete_confirm_title.tr),
+      content: Text(LocaleKeys.missions_page_delete_confirm_content.tr),
       actions: [
-        TextButton(onPressed: () => Get.back(result: false), child: Text(LocaleKeys.missions_page_confirm_no.tr)),
-        ElevatedButton(onPressed: () => Get.back(result: true), child: Text(LocaleKeys.missions_page_confirm_yes.tr)),
+        TextButton(
+            onPressed: () => Get.back(result: false),
+            child: Text(LocaleKeys.missions_page_confirm_no.tr)),
+        ElevatedButton(
+            onPressed: () => Get.back(result: true),
+            child: Text(LocaleKeys.missions_page_confirm_yes.tr)),
       ],
     ));
 
     if (confirm != true) return;
 
     processingMissionIds.add(mission.id);
-    Get.dialog(const Center(child: CircularProgressIndicator()), barrierDismissible: false);
+    Get.dialog(const Center(child: CircularProgressIndicator()),
+        barrierDismissible: false);
     final res = await _repository.deleteMission(missionId: mission.id);
     Get.back();
 
     res.fold((err) {
-      Get.snackbar('خطا', err, backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar(LocaleKeys.common_error.tr, err,
+          backgroundColor: Colors.red, colorText: Colors.white);
     }, (_) {
-      // remove mission locally
       missions.removeWhere((m) => m.id == mission.id);
-      Get.snackbar('حذف شد', 'ماموریت با موفقیت حذف شد', backgroundColor: Colors.green, colorText: Colors.white);
+      Get.snackbar(LocaleKeys.missions_page_delete_success.tr,
+          LocaleKeys.missions_page_delete_success.tr,
+          backgroundColor: Colors.green, colorText: Colors.white);
     });
 
     processingMissionIds.remove(mission.id);
@@ -439,15 +430,17 @@ class MissionListController extends GetxController {
 
     final storage = GetStorage();
     String currentLocale =
-        storage.read(LocalStorageKeys.languageLocale) ?? 'fa';
-    String newLocale = currentLocale == 'fa' ? 'en' : 'fa';
+        storage.read(LocalStorageKeys.languageLocale) ?? 'en';
+    String newLocale = currentLocale == 'en' ? 'fa' : 'en';
     await storage.write(LocalStorageKeys.languageLocale, newLocale);
     Get.updateLocale(Locale(newLocale));
     isLoading.value = false;
     final primary = Get.theme.colorScheme.primary;
     Get.snackbar(
-      'تغییر زبان',
-      newLocale == 'fa' ? 'زبان به فارسی تغییر کرد' : 'Language changed to English',
+      LocaleKeys.missions_page_language_changed_title.tr,
+      newLocale == 'fa'
+          ? LocaleKeys.missions_page_language_changed_to_fa.tr
+          : LocaleKeys.missions_page_language_changed_to_en.tr,
       backgroundColor: primary.withValues(alpha: 0.9),
       colorText: Colors.white,
       duration: const Duration(seconds: 2),
@@ -458,8 +451,8 @@ class MissionListController extends GetxController {
     required String missionId,
     required MissionsModel mission,
   }) async {
-    // First, check whether this hunter already submitted a proposal for this mission
-    final check = await _repository.hasProposal(missionId: missionId, hunterId: userId);
+    final check =
+        await _repository.hasProposal(missionId: missionId, hunterId: userId);
     bool already = false;
     final existsError = <String?>[null];
     check.fold((err) {
@@ -469,26 +462,32 @@ class MissionListController extends GetxController {
     });
 
     if (existsError[0] != null) {
-      // Show a simple dialog with the error and abort
       showDialog(
         context: Get.context!,
         builder: (ctx) => AlertDialog(
-          title: const Text('خطا'),
+          title: Text(LocaleKeys.common_error.tr),
           content: Text(existsError[0]!),
-          actions: [TextButton(onPressed: () => Navigator.of(ctx).pop(), child: const Text('باشه'))],
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                child: Text(LocaleKeys.common_ok.tr))
+          ],
         ),
       );
       return;
     }
 
     if (already) {
-      // Inform user that they've already submitted a proposal
       showDialog(
         context: Get.context!,
         builder: (ctx) => AlertDialog(
-          title: const Text('درخواست قبلی'),
-          content: const Text('شما قبلاً برای این ماموریت درخواست ارسال کرده‌اید.'),
-          actions: [TextButton(onPressed: () => Navigator.of(ctx).pop(), child: const Text('باشه'))],
+          title: Text(LocaleKeys.missions_page_bid_already_title.tr),
+          content: Text(LocaleKeys.missions_page_bid_already_message.tr),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                child: Text(LocaleKeys.common_ok.tr))
+          ],
         ),
       );
       return;
@@ -503,9 +502,15 @@ class MissionListController extends GetxController {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('ارسال درخواست برای ماموریت', textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.w700)),
+            Text(LocaleKeys.missions_page_bid_dialog_title.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.w700)),
             const SizedBox(height: 6),
-            Text(mission.title, textAlign: TextAlign.center, style: TextStyle(fontSize: 14, color: Theme.of(Get.context!).textTheme.bodyMedium?.color)),
+            Text(mission.title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(Get.context!).textTheme.bodyMedium?.color)),
           ],
         ),
         content: Column(
@@ -516,70 +521,101 @@ class MissionListController extends GetxController {
               key: formKey,
               child: TextFormField(
                 controller: priceController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: false),
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly, ThousandsSeparatorInputFormatter(locale: 'en_US')],
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: false),
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  ThousandsSeparatorInputFormatter(locale: 'en_US')
+                ],
                 textDirection: TextDirection.ltr,
                 textAlign: TextAlign.center,
                 decoration: InputDecoration(
-                  labelText: 'قیمت پیشنهادی (تومان)',
+                  labelText: LocaleKeys.missions_page_bid_price_label.tr,
                   prefixIcon: const Icon(Icons.attach_money),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12)),
                   filled: true,
                   fillColor: Colors.grey[100],
                 ),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) {
-                  if (value == null || value.isEmpty) return 'قیمت را وارد کنید';
+                  if (value == null || value.isEmpty)
+                    return LocaleKeys.missions_page_bid_price_required.tr;
                   final digits = value.replaceAll(',', '');
-                  if (int.tryParse(digits) == null) return 'عدد معتبر نیست';
-                  if (int.parse(digits) <= 0) return 'قیمت باید بیشتر از صفر باشد';
+                  if (int.tryParse(digits) == null)
+                    return LocaleKeys.missions_page_bid_price_invalid.tr;
+                  if (int.parse(digits) <= 0)
+                    return LocaleKeys.missions_page_bid_price_positive.tr;
                   return null;
                 },
               ),
             ),
             const SizedBox(height: 12),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text('بودجه کارفرما:', style: TextStyle(color: Colors.grey[600], fontSize: 13)),
-              Text(formatCurrency(mission.budget), style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+              Text(LocaleKeys.missions_page_budget_label.tr + ':',
+                  style: TextStyle(color: Colors.grey[600], fontSize: 13)),
+              Text(formatCurrency(mission.budget),
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
             ]),
             const SizedBox(height: 6),
-            Text('قیمت پیشنهادی خود را وارد کنید و سپس ارسال را بزنید.', style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+            Text(LocaleKeys.missions_page_bid_explain.tr,
+                style: TextStyle(fontSize: 12, color: Colors.grey[600])),
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Get.back(), child: const Text('انصراف')),
+          TextButton(
+              onPressed: () => Get.back(), child: Text(LocaleKeys.common_cancel.tr)),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF8B4513),
               foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
             ),
             onPressed: () async {
               if (!formKey.currentState!.validate()) return;
 
-              // show progress overlay while keeping the submit dialog open underneath
-              Get.dialog(const Center(child: CircularProgressIndicator()), barrierDismissible: false);
+              Get.dialog(const Center(child: CircularProgressIndicator()),
+                  barrierDismissible: false);
 
               final price = int.parse(priceController.text.replaceAll(',', ''));
-              final proposalDto = CreateProposalDto(missionId: missionId, hunterId: userId, proposedPrice: price);
+              final proposalDto = CreateProposalDto(
+                  missionId: missionId, hunterId: userId, proposedPrice: price);
 
               isLoading.value = true;
-              final result = await _repository.createProposal(proposalDto: proposalDto);
+              final result =
+                  await _repository.createProposal(proposalDto: proposalDto);
               isLoading.value = false;
 
-              // close progress indicator
               Get.back();
 
               result.fold((error) {
-                // show error dialog
-                showDialog(context: Get.context!, builder: (ctx) => AlertDialog(title: const Text('خطا'), content: Text(error), actions: [TextButton(onPressed: () => Navigator.of(ctx).pop(), child: const Text('باشه'))]));
+                showDialog(
+                    context: Get.context!,
+                    builder: (ctx) => AlertDialog(
+                            title: Text(LocaleKeys.common_error.tr),
+                            content: Text(error),
+                            actions: [
+                              TextButton(
+                                  onPressed: () => Navigator.of(ctx).pop(),
+                                  child: Text(LocaleKeys.common_ok.tr))
+                            ]));
               }, (newProposal) {
-                // success: close submit dialog and show success confirmation
-                Get.back(); // close submit dialog
-                showDialog(context: Get.context!, builder: (ctx) => AlertDialog(title: const Text('موفقیت‌آمیز'), content: const Text('درخواست شما با موفقیت ارسال شد.'), actions: [TextButton(onPressed: () => Navigator.of(ctx).pop(), child: const Text('باشه'))]));
+                Get.back();
+                showDialog(
+                    context: Get.context!,
+                    builder: (ctx) => AlertDialog(
+                            title: Text(LocaleKeys.missions_page_bid_sent_title.tr),
+                            content: Text(LocaleKeys.missions_page_bid_sent_message.tr),
+                            actions: [
+                              TextButton(
+                                  onPressed: () => Navigator.of(ctx).pop(),
+                                  child: Text(LocaleKeys.common_ok.tr))
+                            ]));
                 fetchMissions();
               });
             },
-            child: const Text('ارسال درخواست'),
+            child: Text(LocaleKeys.missions_page_bid_submit_label.tr),
           ),
         ],
       ),
@@ -588,37 +624,32 @@ class MissionListController extends GetxController {
   }
 
   Future<void> toggleTheme() async {
-    final newMode = themeMode.value == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
+    final newMode =
+        themeMode.value == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
     themeMode.value = newMode;
     await ThemeService.setThemeMode(newMode);
-    // Ensure the app's GetMaterialApp actually applies the new ThemeData.
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         Get.changeThemeMode(newMode);
-        // Also force-update the ThemeData itself to avoid cases where only partial
-        // theme properties update. This guarantees floatingActionButtonTheme (and others)
-        // are replaced immediately.
-        Get.changeTheme(newMode == ThemeMode.dark ? ThemeService.darkTheme() : ThemeService.lightTheme());
-      } catch (e) {
-        // ignore - we avoid crashing the app on theme change issues
-      }
+
+        Get.changeTheme(newMode == ThemeMode.dark
+            ? ThemeService.darkTheme()
+            : ThemeService.lightTheme());
+      } catch (e) {}
     });
   }
 
   Future<void> loadGlobalBudgetRange() async {
     try {
       final res = await _repository.getBudgetRange();
-      res.fold((err) {
-        // ignore silently, keep defaults
-      }, (map) {
+      res.fold((err) {}, (map) {
         final min = map['min'] ?? 0;
         final max = map['max'] ?? 0;
         globalMinBudget.value = min;
         globalMaxBudget.value = max <= min ? min + 1 : max;
       });
-    } catch (_) {
-      // ignore
-    }
+    } catch (_) {}
   }
 
   @override

@@ -1,4 +1,4 @@
-import 'package:either_dart/either.dart';
+﻿import 'package:either_dart/either.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -9,7 +9,7 @@ import '../models/dto/update_proposal_dto.dart';
 import '../../missions/edit_mission/models/mission_model.dart' as EditMissionModel;
 
 class HunterProposalRepository {
-  // No external repository: fetch mission details directly here to keep logic local.
+  
 
   Future<Either<String, List<ProposalProfileModel>>> getAllHunterProposals({
     required String hunterId,
@@ -17,7 +17,7 @@ class HunterProposalRepository {
     bool? isCompleted,
   }) async {
     try {
-      // Build URI from base and merge optional query parameters for server-side filtering
+      
       final base = UrlRepository.getBidsForHunterId(hunterId: hunterId);
       final qp = Map<String, String>.from(base.queryParameters);
       if (isAccepted != null) qp['isAccepted'] = isAccepted.toString();
@@ -38,13 +38,13 @@ class HunterProposalRepository {
             .map((item) => ProposalProfileModel.fromJson(item))
             .toList();
 
-        // For proposals without embedded mission, fetch mission by id and attach it.
+        
         final Map<String, EditMissionModel.MissionModel> fetchedMissions = {};
         final List<Future<void>> fetchers = [];
 
         for (final p in bids) {
           if (p.mission == null && !fetchedMissions.containsKey(p.missionId)) {
-            // fetch and cache per missionId to avoid duplicate requests
+            
             fetchers.add(http.get(UrlRepository.getMissionById(missionId: p.missionId)).then((resp) {
               if (resp.statusCode == 200) {
                 try {
@@ -53,11 +53,11 @@ class HunterProposalRepository {
                   final m = EditMissionModel.MissionModel.fromJson(json: data);
                   fetchedMissions[p.missionId] = m;
                 } catch (_) {
-                  // ignore parse errors; leave mission missing
+                  
                 }
               }
             }).catchError((_) {
-              // ignore network errors for individual missions
+              
             }));
           }
         }
@@ -66,7 +66,7 @@ class HunterProposalRepository {
           await Future.wait(fetchers);
         }
 
-        // Attach fetched mission models to proposals via copyWith
+        
         final List<ProposalProfileModel> enriched = bids.map((p) {
           final m = fetchedMissions[p.missionId];
           if (m != null) {
@@ -77,10 +77,10 @@ class HunterProposalRepository {
 
         return Right(enriched);
       } else {
-        return Left('خطا در دریافت پیشنهادات شکارچی: ${response.statusCode}');
+        return Left('Ø®Ø·Ø§ Ø¯Ø± Ø¯Ø±ÛŒØ§ÙØª Ù¾ÛŒØ´Ù†Ù‡Ø§Ø¯Ø§Øª Ø´Ú©Ø§Ø±Ú†ÛŒ: ${response.statusCode}');
       }
     } catch (e) {
-      return Left('خطای شبکه یا سرور: ${e.toString()}');
+      return Left('Ø®Ø·Ø§ÛŒ Ø´Ø¨Ú©Ù‡ ÛŒØ§ Ø³Ø±ÙˆØ±: ${e.toString()}');
     }
   }
   Future<Either<String, bool>> requestMissionCompletion({
@@ -98,10 +98,10 @@ class HunterProposalRepository {
       if (response.statusCode == 200) {
         return const Right(true);
       } else {
-        return Left('خطا در اعلام اتمام ماموریت: ${response.statusCode}');
+        return Left('Ø®Ø·Ø§ Ø¯Ø± Ø§Ø¹Ù„Ø§Ù… Ø§ØªÙ…Ø§Ù… Ù…Ø§Ù…ÙˆØ±ÛŒØª: ${response.statusCode}');
       }
     } catch (e) {
-      return Left('خطای شبکه در اعلام اتمام: ${e.toString()}');
+      return Left('Ø®Ø·Ø§ÛŒ Ø´Ø¨Ú©Ù‡ Ø¯Ø± Ø§Ø¹Ù„Ø§Ù… Ø§ØªÙ…Ø§Ù…: ${e.toString()}');
     }
   }
 
@@ -120,14 +120,14 @@ class HunterProposalRepository {
       if (response.statusCode == 200) {
         return const Right(true);
       } else {
-        return Left('خطا در اعلام شکست ماموریت: ${response.statusCode}');
+        return Left('Ø®Ø·Ø§ Ø¯Ø± Ø§Ø¹Ù„Ø§Ù… Ø´Ú©Ø³Øª Ù…Ø§Ù…ÙˆØ±ÛŒØª: ${response.statusCode}');
       }
     } catch (e) {
-      return Left('خطای شبکه در اعلام شکست: ${e.toString()}');
+      return Left('Ø®Ø·Ø§ÛŒ Ø´Ø¨Ú©Ù‡ Ø¯Ø± Ø§Ø¹Ù„Ø§Ù… Ø´Ú©Ø³Øª: ${e.toString()}');
     }
   }
 
-  /// Update a proposal (e.g., change proposedPrice) by PATCHing the proposal resource.
+  
   Future<Either<String, bool>> updateProposal({required String proposalId, required UpdateProposalDto dto}) async {
     try {
       final url = UrlRepository.getProposalById(proposalId: proposalId);
@@ -141,14 +141,14 @@ class HunterProposalRepository {
       if (response.statusCode == 200) {
         return const Right(true);
       } else {
-        return Left('خطا در به‌روزرسانی پیشنهاد: ${response.statusCode}');
+        return Left('Ø®Ø·Ø§ Ø¯Ø± Ø¨Ù‡â€ŒØ±ÙˆØ²Ø±Ø³Ø§Ù†ÛŒ Ù¾ÛŒØ´Ù†Ù‡Ø§Ø¯: ${response.statusCode}');
       }
     } catch (e) {
-      return Left('خطای شبکه در به‌روزرسانی پیشنهاد: ${e.toString()}');
+      return Left('Ø®Ø·Ø§ÛŒ Ø´Ø¨Ú©Ù‡ Ø¯Ø± Ø¨Ù‡â€ŒØ±ÙˆØ²Ø±Ø³Ø§Ù†ÛŒ Ù¾ÛŒØ´Ù†Ù‡Ø§Ø¯: ${e.toString()}');
     }
   }
 
-  /// Delete a proposal by id.
+  
   Future<Either<String, bool>> deleteProposal({required String proposalId}) async {
     try {
       final url = UrlRepository.getProposalById(proposalId: proposalId);
@@ -160,10 +160,12 @@ class HunterProposalRepository {
       if (response.statusCode == 200 || response.statusCode == 204) {
         return const Right(true);
       } else {
-        return Left('خطا در حذف پیشنهاد: ${response.statusCode}');
+        return Left('Ø®Ø·Ø§ Ø¯Ø± Ø­Ø°Ù Ù¾ÛŒØ´Ù†Ù‡Ø§Ø¯: ${response.statusCode}');
       }
     } catch (e) {
-      return Left('خطای شبکه در حذف پیشنهاد: ${e.toString()}');
+      return Left('Ø®Ø·Ø§ÛŒ Ø´Ø¨Ú©Ù‡ Ø¯Ø± Ø­Ø°Ù Ù¾ÛŒØ´Ù†Ù‡Ø§Ø¯: ${e.toString()}');
     }
   }
 }
+
+

@@ -1,10 +1,12 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get/Get.dart';
 import 'package:intl/intl.dart' as intl;
-// using .tr on string keys for localization; no generated locales import required here
+import '../../../../../generated/locales.g.dart';
+
 import '../models/edit_mission_dto.dart';
 import '../models/mission_model.dart';
 import '../repository/edit_mission_repository.dart';
+import '../../../../infrastructure/utils/validators.dart' as validators;
 
 class EditMissionController extends GetxController {
   final EditMissionRepository _repository = EditMissionRepository();
@@ -32,7 +34,7 @@ class EditMissionController extends GetxController {
   }
 
   void _bindCategory() {
-    // keep text controller in sync with selectedCategory
+    
     ever(selectedCategory, (String? v) {
       final text = v ?? '';
       if (categoryController.text != text) categoryController.text = text;
@@ -47,8 +49,8 @@ class EditMissionController extends GetxController {
     result.fold(
       (error) {
         isLoading.value = false;
-        // show localized error message
-        Get.snackbar('error_error'.tr, 'missions_page_error_update_mission'.trParams({'error': error}), backgroundColor: Colors.red.shade100);
+        
+        Get.snackbar(LocaleKeys.error_error.tr, LocaleKeys.missions_page_error_update_mission.trParams({'error': error}), backgroundColor: Colors.red.shade100);
         Get.back();
       },
       (fetchedMission) {
@@ -56,7 +58,7 @@ class EditMissionController extends GetxController {
         isLoading.value = false;
         titleController.text = fetchedMission.title;
         descriptionController.text = fetchedMission.description;
-        // format budget with thousand separators so it shows commas in edit view
+        
         try {
           final formatted = intl.NumberFormat.decimalPattern('en_US').format(fetchedMission.budget);
           try { Get.log('EditMissionController: setting formatted budget -> $formatted'); } catch (_) { print('EditMissionController: setting formatted budget -> $formatted'); }
@@ -76,29 +78,22 @@ class EditMissionController extends GetxController {
   }
 
   String? validateTitle(String? value) {
-    if (value == null || value.trim().isEmpty) return 'missions_page_validate_title_required'.tr;
-    if (value.trim().length < 5) return 'missions_page_validate_title_min'.tr;
-    return null;
+    return validators.validateTitle(value);
   }
 
   String? validateDescription(String? value) {
-    if (value == null || value.trim().isEmpty) return 'missions_page_validate_description_required'.tr;
-    if (value.trim().length < 20) return 'missions_page_validate_description_min'.tr;
-    return null;
+    return validators.validateDescription(value);
   }
 
   String? validateBudget(String? value) {
-    if (value == null || value.isEmpty) return 'missions_page_validate_budget_required'.tr;
-    final budget = int.tryParse(value.replaceAll(',', ''));
-    if (budget == null || budget < 100000) return 'missions_page_validate_budget_min'.tr;
-    return null;
+    return validators.validateBudget(value);
   }
 
   Future<void> submitEdit() async {
     if (!formKey.currentState!.validate()) return;
 
     if (selectedCategory.value.trim().isEmpty) {
-      Get.snackbar('خطا', 'دسته‌بندی را انتخاب یا وارد کنید');
+      Get.snackbar('Ø®Ø·Ø§', 'Ø¯Ø³ØªÙ‡â€ŒØ¨Ù†Ø¯ÛŒ Ø±Ø§ Ø§Ù†ØªØ®Ø§Ø¨ ÛŒØ§ ÙˆØ§Ø±Ø¯ Ú©Ù†ÛŒØ¯');
       return;
     }
 
@@ -106,7 +101,7 @@ class EditMissionController extends GetxController {
 
     final dto = EditMissionDto(
       id: missionId,
-      // ID رو از ماموریت فعلی می‌گیریم
+      
       title: titleController.text.trim(),
       description: descriptionController.text.trim(),
       category: selectedCategory.value,
@@ -120,7 +115,7 @@ class EditMissionController extends GetxController {
     isLoading.value = false;
 
     result.fold(
-      (error) => Get.snackbar('error_error'.tr, 'missions_page_error_update_mission'.trParams({'error': error}), backgroundColor: Colors.red.shade100),
+      (error) => Get.snackbar(LocaleKeys.error_error.tr, LocaleKeys.missions_page_error_update_mission.trParams({'error': error}), backgroundColor: Colors.red.shade100),
       (updatedMission) {
         Get.back(result: updatedMission);
       },
@@ -160,3 +155,5 @@ class EditMissionController extends GetxController {
     super.onClose();
   }
 }
+
+

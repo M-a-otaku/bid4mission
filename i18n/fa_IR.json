@@ -25,6 +25,8 @@
     "no_account": "حساب کاربری ندارید؟",
     "validate_password": "رمز عبور خود را وارد کنید",
     "validate_password_min": "لطفا رمز عبور مناسب وارد کنید حداقل هشت حرف",
+    "validate_password_no_persian": "رمز عبور نباید شامل حروف فارسی باشد",
+    "validate_username_no_persian": "نام کاربری نباید شامل حروف فارسی باشد",
     "validate_username": "نام کاربری خود را وارد کنید",
     "create_user": "کاربر با موفقیت ایجاد شد"
   },
@@ -227,8 +229,30 @@
     "delete_confirm_title": "حذف ماموریت",
     "delete_confirm_content": "آیا از حذف این ماموریت اطمینان دارید؟",
     "delete_success": "ماموریت با موفقیت حذف شد",
-    "delete_error": "خطا در حذف ماموریت: {error}"
+    "delete_error": "خطا در حذف ماموریت: {error}",
+
+    "bid_dialog_title": "ارسال پیشنهاد",
+    "bid_price_label": "قیمت پیشنهادی شما (تومان)",
+    "bid_price_required": "لطفاً یک قیمت وارد کنید",
+    "bid_price_invalid": "قیمت نامعتبر است",
+    "bid_price_positive": "قیمت باید بیش از صفر باشد",
+    "bid_explain": "قیمت پیشنهادی را وارد کنید و ثبت را بزنید تا پیشنهاد ارسال شود.",
+    "bid_submit_label": "ارسال پیشنهاد",
+    "bid_sent_title": "پیشنهاد ارسال شد",
+    "bid_sent_message": "پیشنهاد شما با موفقیت ارسال شد.",
+    "bid_already_title": "پیشنهاد موجود است",
+    "bid_already_message": "برای این ماموریت قبلاً پیشنهادی ارسال کرده‌اید.",
+
+    "confirm_done_title": "تکمیل شد",
+    "confirm_done_message": "وضعیت ماموریت به 'تکمیل‌شده' تغییر کرد.",
+    "reject_done_title": "رد شد",
+    "reject_done_message": "ماموریت به‌عنوان شکست‌خورده علامت‌گذاری شد.",
+
+    "language_changed_title": "تغییر زبان",
+    "language_changed_to_fa": "زبان به فارسی تغییر کرد",
+    "language_changed_to_en": "Language changed to English"
   },
+
   "status": {
     "open": "باز",
     "in_progress": "در حال انجام",
@@ -236,5 +260,31 @@
     "expired": "منقضی",
     "pending_approval": "در انتظار تأیید",
     "failed": "شکست‌خورده"
-  }
+  },
+
+  "common_cancel": "لغو",
+  "common_ok": "باشه",
+  "common_error": "خطا",
+  "currency_toman": "تومان",
+  "profile_page_mission_title_unknown": "عنوان نامشخص",
+  "profile_proposed_price_label": "قیمت پیشنهادی: {price}",
+  "profile_sent_label": "ارسال: {date}",
+  "profile_button_announce_success": "اعلام موفقیت",
+  "profile_button_announce_failure": "اعلام شکست",
+  "profile_action_edit_proposal_tooltip": "ویرایش درخواست",
+  "profile_action_delete_proposal_tooltip": "حذف درخواست",
+  "profile_dialog_request_completion_title": "تأیید تکمیل",
+  "profile_dialog_request_completion_content": "آیا تأیید می‌کنید ماموریت \"{title}\" با موفقیت انجام شده است؟",
+  "profile_dialog_request_completion_confirm": "تأیید",
+  "profile_dialog_request_failure_title": "تأیید شکست",
+  "profile_dialog_request_failure_content": "آیا تأیید می‌کنید ماموریت \"{title}\" شکست خورده است؟",
+  "profile_dialog_request_failure_confirm": "تأیید",
+  "profile_edit_proposal_title": "ویرایش درخواست",
+  "profile_edit_proposal_price_label": "قیمت",
+  "profile_edit_proposal_price_required": "قیمت الزامی است",
+  "profile_edit_proposal_price_invalid": "قیمت نامعتبر است",
+  "profile_edit_proposal_save": "ذخیره",
+  "profile_delete_proposal_title": "حذف درخواست",
+  "profile_delete_proposal_content": "آیا از حذف این درخواست مطمئن هستید؟",
+  "profile_delete_proposal_confirm": "حذف"
 }

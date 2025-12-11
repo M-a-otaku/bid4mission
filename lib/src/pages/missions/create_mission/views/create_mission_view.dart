@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart' as intl;
-import 'package:flutter/services.dart';
 import '../../../../components/widgets/tag_input/view/smart_tag_input.dart';
 import '../../../../infrastructure/utils/thousands_separator_input_formatter.dart';
 import '../controller/create_mission_controller.dart';
@@ -14,26 +13,26 @@ class CreateMissionView extends GetView<CreateMissionController> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    // design tokens for a more attractive, contrasting layout
+    
     final backgroundTop = colorScheme.primaryContainer.withValues(alpha: 0.06);
     final backgroundBottom = colorScheme.surfaceContainerLowest.withValues(alpha: 0.02);
     final cardColor = colorScheme.surface;
-    // inputs use a subtle surfaceVariant so they stand out against card
+    
     final inputFill = theme.inputDecorationTheme.fillColor ?? colorScheme.surfaceContainerLowest.withValues(alpha: 0.04);
 
     return Scaffold(
-      // AppBar: use a prominent primaryContainer so it contrasts with background
+      
       appBar: AppBar(
-        title: Text('missions_page_create_title'.tr),
+        title: Text(LocaleKeys.missions_page_create_title.tr),
         backgroundColor: theme.appBarTheme.backgroundColor ?? colorScheme.primary,
         foregroundColor: theme.appBarTheme.foregroundColor ?? colorScheme.onPrimary,
         elevation: 6,
         centerTitle: true,
-        // subtle bottom border via shadow color
+        
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       ),
 
-      // Background: subtle gradient between background and surface to create depth
+      
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -62,7 +61,7 @@ class CreateMissionView extends GetView<CreateMissionController> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          // header row with icon and title
+                          
                           Row(
                             children: [
                               Container(
@@ -74,21 +73,21 @@ class CreateMissionView extends GetView<CreateMissionController> {
                                 child: Icon(Icons.work_outline, color: colorScheme.tertiary, size: 20),
                               ),
                               const SizedBox(width: 12),
-                              Text('missions_page_create_header'.tr, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800)),
+                              Text(LocaleKeys.missions_page_create_header.tr, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800)),
                             ],
                           ),
                           const SizedBox(height: 16),
-                          _sectionTitle('missions_page_section_basic_info'.tr, theme, colorScheme),
+                          _sectionTitle(LocaleKeys.missions_page_section_basic_info.tr, theme, colorScheme),
                           const SizedBox(height: 8),
                           _titleField(theme, inputFill, colorScheme),
                           const SizedBox(height: 12),
 
-                          _sectionTitle('missions_page_section_description'.tr, theme, colorScheme),
+                          _sectionTitle(LocaleKeys.missions_page_section_description.tr, theme, colorScheme),
                           const SizedBox(height: 8),
                           _descriptionField(theme, inputFill, colorScheme),
                           const SizedBox(height: 12),
 
-                          _sectionTitle('missions_page_section_category'.tr, theme, colorScheme),
+                          _sectionTitle(LocaleKeys.missions_page_section_category.tr, theme, colorScheme),
                           const SizedBox(height: 8),
                           SmartTagInput(
                             controller: controller.categoryController,
@@ -101,7 +100,7 @@ class CreateMissionView extends GetView<CreateMissionController> {
                           ),
                           const SizedBox(height: 12),
 
-                          _sectionTitle('missions_page_section_budget_deadline'.tr, theme, colorScheme),
+                          _sectionTitle(LocaleKeys.missions_page_section_budget_deadline.tr, theme, colorScheme),
                           const SizedBox(height: 8),
                           Row(
                             children: [
@@ -112,7 +111,7 @@ class CreateMissionView extends GetView<CreateMissionController> {
                           ),
 
                           const SizedBox(height: 20),
-                          // removed inline cancel/submit buttons; submission moved to FAB
+                          
                         ],
                       ),
                     ),
@@ -124,13 +123,13 @@ class CreateMissionView extends GetView<CreateMissionController> {
         ),
       ),
 
-      // floatingActionButton: keep hidden (we use action buttons in form) but leave for accessibility
+      
       floatingActionButton: Obx(() {
         final isLoading = controller.isLoading.value;
-        // disable FAB when loading
+        
         return FloatingActionButton(
           onPressed: isLoading ? null : () async {
-            // try submit; if form invalid, show validation messages
+            
             await controller.submitMission();
           },
           backgroundColor: theme.floatingActionButtonTheme.backgroundColor ?? colorScheme.primary,
@@ -144,7 +143,7 @@ class CreateMissionView extends GetView<CreateMissionController> {
                     strokeWidth: 2,
                   ),
                 )
-              : Text('missions_page_fab_publish'.tr),
+              : Text(LocaleKeys.missions_page_fab_publish.tr),
         );
       }),
     );
@@ -179,16 +178,18 @@ class CreateMissionView extends GetView<CreateMissionController> {
   Widget _titleField(ThemeData theme, Color fillColor, ColorScheme colorScheme) => TextFormField(
         controller: controller.titleController,
         validator: controller.validateTitle,
-        decoration: _inputDecoration('missions_page_title_label'.tr, Icons.title, theme, fillColor, colorScheme),
+        decoration: _inputDecoration(LocaleKeys.missions_page_title_label.tr, Icons.title, theme, fillColor, colorScheme),
         style: theme.textTheme.bodyLarge,
+    autovalidateMode: AutovalidateMode.onUserInteraction,
       );
 
   Widget _descriptionField(ThemeData theme, Color fillColor, ColorScheme colorScheme) => TextFormField(
         controller: controller.descriptionController,
         validator: controller.validateDescription,
         maxLines: 5,
-        decoration: _inputDecoration('missions_page_description_label'.tr, Icons.description, theme, fillColor, colorScheme),
+        decoration: _inputDecoration(LocaleKeys.missions_page_description_label.tr, Icons.description, theme, fillColor, colorScheme),
         style: theme.textTheme.bodyMedium,
+    autovalidateMode: AutovalidateMode.onUserInteraction,
       );
 
   Widget _budgetField(ThemeData theme, Color fillColor, ColorScheme colorScheme) => TextFormField(
@@ -196,8 +197,9 @@ class CreateMissionView extends GetView<CreateMissionController> {
         validator: controller.validateBudget,
         keyboardType: const TextInputType.numberWithOptions(decimal: false, signed: false),
         inputFormatters: [ThousandsSeparatorInputFormatter(locale: 'en_US')],
-        decoration: _inputDecoration('missions_page_budget_label_create'.tr, Icons.attach_money, theme, fillColor, colorScheme),
+        decoration: _inputDecoration(LocaleKeys.missions_page_budget_label_create.tr, Icons.attach_money, theme, fillColor, colorScheme),
         style: theme.textTheme.bodyLarge,
+    autovalidateMode: AutovalidateMode.onUserInteraction,
       );
 
   Widget _deadlinePicker(ThemeData theme, ColorScheme colorScheme) => Obx(() => InkWell(
@@ -217,8 +219,8 @@ class CreateMissionView extends GetView<CreateMissionController> {
                Expanded(
                  child: Text(
                    controller.selectedDeadline.value == null
-                       ? 'missions_page_deadline_select_hint'.tr
-                       : 'missions_page_deadline_label_format'.trParams({'date': intl.DateFormat('yyyy/MM/dd HH:mm').format(controller.selectedDeadline.value!)}),
+                       ? LocaleKeys.missions_page_deadline_select_hint.tr
+                       : LocaleKeys.missions_page_deadline_label_format.trParams({'date': intl.DateFormat('yyyy/MM/dd HH:mm').format(controller.selectedDeadline.value!)}),
                    style: theme.textTheme.bodyMedium,
                  ),
                ),
@@ -237,3 +239,5 @@ class CreateMissionView extends GetView<CreateMissionController> {
         labelStyle: theme.inputDecorationTheme.labelStyle ?? theme.textTheme.bodyMedium,
       );
 }
+
+

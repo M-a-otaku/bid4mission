@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
 import '../../../../../infrastructure/commons/status.dart';
 
@@ -53,9 +53,9 @@ class MissionModel {
 
   factory MissionModel.fromJson(Map<String, dynamic> json) => MissionModel(
       id: json['id'] ?? '',
-      title: json['title'] ?? 'بدون عنوان',
+      title: json['title'] ?? 'Ø¨Ø¯ÙˆÙ† Ø¹Ù†ÙˆØ§Ù†',
       description: json['description'] ?? '',
-      category: json['category'] ?? 'عمومی',
+      category: json['category'] ?? 'Ø¹Ù…ÙˆÙ…ÛŒ',
       budget: json['budget'] ?? 0,
       deadline: DateTime.tryParse(json['deadline'] ?? '') ?? DateTime.now(),
       status: parseStatus(json['status'] ?? 'open'),
@@ -63,3 +63,4 @@ class MissionModel {
       chosenProposalId: json['chosenProposalId'],
     );
 }
+

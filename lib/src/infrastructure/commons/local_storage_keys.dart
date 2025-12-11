@@ -1,4 +1,4 @@
-class LocalStorageKeys {
+﻿class LocalStorageKeys {
   LocalStorageKeys._();
 
   static const String userId = "userId";
@@ -10,3 +10,5 @@ class LocalStorageKeys {
   static const String themeMode = 'theme_mode';
 
 }
+
+

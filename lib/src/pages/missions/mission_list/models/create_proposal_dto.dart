@@ -1,4 +1,4 @@
-class CreateProposalDto {
+﻿class CreateProposalDto {
   final String missionId;
   final String hunterId;
   final int proposedPrice;
@@ -17,3 +17,4 @@ class CreateProposalDto {
     'createdAt': DateTime.now().toUtc().toIso8601String(),
   };
 }
+

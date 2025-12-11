@@ -1,4 +1,4 @@
-import '../../../missions/edit_mission/models/mission_model.dart';
+﻿import '../../../missions/edit_mission/models/mission_model.dart';
 
 class ProposalProfileModel {
   final String id;
@@ -37,7 +37,7 @@ class ProposalProfileModel {
     );
   }
 
-  // --- copyWith Method ---
+  
   ProposalProfileModel copyWith({
     String? id,
     String? missionId,
@@ -60,3 +60,5 @@ class ProposalProfileModel {
     );
   }
 }
+
+

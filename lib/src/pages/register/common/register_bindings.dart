@@ -1,4 +1,4 @@
-import '../controllers/register_controller.dart';
+﻿import '../controllers/register_controller.dart';
 import 'package:get/get.dart';
 
 class RegisterBindings extends Bindings {
@@ -7,3 +7,5 @@ class RegisterBindings extends Bindings {
     Get.lazyPut(() => RegisterController());
   }
 }
+
+

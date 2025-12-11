@@ -1,4 +1,4 @@
-import 'dart:math' as math;
+﻿import 'dart:math' as math;
 import '../../../../infrastructure/commons/status.dart';
 import 'package:flutter/material.dart';
 import 'package:get/Get.dart';
@@ -11,7 +11,7 @@ class MissionListView extends GetView<MissionListController> {
 
   @override
   Widget build(BuildContext context) {
-    // Use theme values inside build so changes are applied
+    
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -43,7 +43,7 @@ class MissionListView extends GetView<MissionListController> {
                           prefixIcon:
                               Icon(Icons.search, color: colorScheme.primary),
                           hintText: LocaleKeys.missions_page_search_hint.tr,
-                          // use reactive searchQuery so Obx rebuilds when user types
+                          
                           suffixIcon: controller.searchQuery.value.isNotEmpty
                               ? IconButton(
                                   icon: Icon(Icons.clear,
@@ -71,11 +71,11 @@ class MissionListView extends GetView<MissionListController> {
                   ],
                 ),
               ),
-              // mission list area: show empty state here but keep search bar above
+              
               Expanded(
                 child: controller.missions.isEmpty
                     ? SingleChildScrollView(
-                        // allow pull-to-refresh even when there are no items
+                        
                         physics: const AlwaysScrollableScrollPhysics(),
                         child: SizedBox(
                           height: MediaQuery.of(context).size.height * 0.6,
@@ -106,7 +106,7 @@ class MissionListView extends GetView<MissionListController> {
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(14),
                                 onTap: () {
-                                  // Hunter should be able to open the submit-bid dialog when mission is open
+                                  
                                   if (controller.roleOrDefault == Role.hunter) {
                                     if (mission.status.isOpen) {
                                       controller.submitBid(
@@ -122,7 +122,7 @@ class MissionListView extends GetView<MissionListController> {
                                               .tr);
                                     }
                                   } else {
-                                    // Employers and others navigate to details
+                                    
                                     controller.toMissionDetails(
                                         missionId: mission.id);
                                   }
@@ -137,7 +137,7 @@ class MissionListView extends GetView<MissionListController> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          // leading avatar / icon
+                                          
                                           Container(
                                             width: 56,
                                             height: 56,
@@ -153,7 +153,7 @@ class MissionListView extends GetView<MissionListController> {
                                                 size: 28),
                                           ),
                                           const SizedBox(width: 12),
-                                          // main content
+                                          
                                           Expanded(
                                             child: Column(
                                               crossAxisAlignment:
@@ -176,7 +176,7 @@ class MissionListView extends GetView<MissionListController> {
                                                     const SizedBox(width: 8),
                                                     Chip(
                                                       label: Text(
-                                                          // displayStatus returns token; show localized label
+                                                          
                                                           ('status_${statusToString(mission.status)}')
                                                               .tr,
                                                           style: theme.textTheme
@@ -270,7 +270,7 @@ class MissionListView extends GetView<MissionListController> {
                                             ),
                                           ),
                                           const SizedBox(width: 8),
-                                          // edit icon stays in the top-right as a quick action
+                                          
                                           Column(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
@@ -294,7 +294,7 @@ class MissionListView extends GetView<MissionListController> {
                                                                       mission
                                                                           .id),
                                                     ),
-                                                    // delete action
+                                                    
                                                     Obx(() {
                                                       final processing = controller
                                                           .processingMissionIds
@@ -327,7 +327,7 @@ class MissionListView extends GetView<MissionListController> {
                                         ],
                                       ),
 
-                                      // Prominent confirm/reject button bar for pendingApproval
+                                      
                                       if (controller.roleOrDefault ==
                                               Role.employer &&
                                           mission.employerId ==
@@ -504,10 +504,10 @@ class MissionListView extends GetView<MissionListController> {
         );
       }),
       floatingActionButton: Obx(() {
-        // keep reactive reads so this Obx updates when user/role/theme change
+        
         final _loaded = controller.isUserLoaded.value;
         final role = controller.roleOrDefault;
-        // read themeMode to ensure rebuild when controller toggles theme (optional)
+        
         final _ = controller.themeMode.value;
 
         return (_loaded && role == Role.employer)
@@ -552,7 +552,7 @@ class MissionListView extends GetView<MissionListController> {
       ),
       actions: [
         Obx(() {
-          // build actions reactively so role & theme changes update UI immediately
+          
           final List<Widget> acts = [];
           acts.add(IconButton(
             icon: Icon(
@@ -603,19 +603,19 @@ class MissionListView extends GetView<MissionListController> {
       context: context,
       isScrollControlled: true,
       builder: (ctx) {
-        // use global min/max budget provided by controller (fetched from server)
+        
         final int minAvailable = controller.globalMinBudget.value;
         final int maxAvailable =
             controller.globalMaxBudget.value <= minAvailable
                 ? minAvailable + 1
                 : controller.globalMaxBudget.value;
 
-        // temp local state (captured by inner StatefulBuilder so values persist)
+        
         final tempSelectedCategories =
             Set<String>.from(controller.selectedCategories);
         final tempSelectedStatuses =
             Set<String>.from(controller.selectedStatuses);
-        // budget enable toggle: whether budget filter is active
+        
         bool tempBudgetEnabled = controller.isBudgetFilterEnabled.value;
         int tempMin = controller.minBudget?.value == null ||
                 controller.minBudget!.value == 0
@@ -627,7 +627,7 @@ class MissionListView extends GetView<MissionListController> {
             : controller.maxBudget!.value;
         String tempSort = controller.sortByDate.value;
 
-        // Normalize
+        
         tempMin = (tempMin.clamp(minAvailable, maxAvailable) as num).toInt();
         tempMax = (tempMax.clamp(minAvailable, maxAvailable) as num).toInt();
         if (tempMin > tempMax) {
@@ -661,7 +661,7 @@ class MissionListView extends GetView<MissionListController> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                // categories
+                
                 Obx(() {
                   if (controller.categories.isEmpty)
                     return const SizedBox.shrink();
@@ -708,7 +708,7 @@ class MissionListView extends GetView<MissionListController> {
                   );
                 }),
                 const SizedBox(height: 12),
-                // budget range (RangeSlider) + enable toggle
+                
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -776,7 +776,7 @@ class MissionListView extends GetView<MissionListController> {
                   ],
                 ),
                 const SizedBox(height: 12),
-                // statuses
+                
                 Wrap(
                   spacing: 8,
                   children: controller.availableStatuses().map((s) {
@@ -796,7 +796,7 @@ class MissionListView extends GetView<MissionListController> {
                   }).toList(),
                 ),
                 const SizedBox(height: 12),
-                // sort
+                
                 Row(
                   children: [
                     Text(LocaleKeys.missions_page_sort_label.tr),
@@ -823,7 +823,7 @@ class MissionListView extends GetView<MissionListController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Clear applied filters (left)
+                    
                     Expanded(
                       child: OutlinedButton(
                         onPressed: () {
@@ -839,7 +839,7 @@ class MissionListView extends GetView<MissionListController> {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    // Apply button (right)
+                    
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
@@ -849,7 +849,7 @@ class MissionListView extends GetView<MissionListController> {
                               .assignAll(tempSelectedCategories.toList());
                           controller.selectedStatuses
                               .assignAll(tempSelectedStatuses.toList());
-                          // apply budget filter only if enabled
+                          
                           controller.isBudgetFilterEnabled.value =
                               tempBudgetEnabled;
                           if (tempBudgetEnabled) {
@@ -875,3 +875,5 @@ class MissionListView extends GetView<MissionListController> {
     );
   }
 }
+
+

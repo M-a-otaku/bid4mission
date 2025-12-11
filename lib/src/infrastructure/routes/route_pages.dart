@@ -1,4 +1,4 @@
-import 'route_paths.dart';
+﻿import 'route_paths.dart';
 import 'package:get/get.dart';
 import '../../pages/missions/create_mission/commons/create_mission_bindings.dart';
 import '../../pages/missions/create_mission/views/create_mission_view.dart';
@@ -61,3 +61,5 @@ class RoutePages {
         binding: HunterProfileBindings()),
   ];
 }
+
+

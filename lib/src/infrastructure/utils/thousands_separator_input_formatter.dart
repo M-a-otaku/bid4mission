@@ -1,4 +1,4 @@
-import 'package:flutter/services.dart';
+﻿import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class ThousandsSeparatorInputFormatter extends TextInputFormatter {
@@ -10,29 +10,29 @@ class ThousandsSeparatorInputFormatter extends TextInputFormatter {
 
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    // If pasted or removed non-digit chars, normalize
+    
     final newDigits = _onlyDigits(newValue.text);
 
     if (newDigits.isEmpty) {
       return TextEditingValue(text: '', selection: TextSelection.collapsed(offset: 0));
     }
 
-    // format number
+    
     String formatted;
     try {
       final parsed = int.parse(newDigits);
       formatted = _formatter.format(parsed);
     } catch (_) {
-      // Fallback in case of parse error (very large numbers)
-      // Insert separators manually
+      
+      
       formatted = _manualFormat(newDigits);
     }
 
-    // compute caret position: count digits before newValue.selection
+    
     final selectionIndex = newValue.selection.baseOffset;
     final digitsBeforeCursor = _countDigitsBefore(newValue.text, selectionIndex);
 
-    // set new cursor by finding position after digitsBeforeCursor in formatted
+    
     int newCursorPosition = _cursorPositionFromDigits(formatted, digitsBeforeCursor);
 
     return TextEditingValue(
@@ -53,7 +53,7 @@ class ThousandsSeparatorInputFormatter extends TextInputFormatter {
     for (int i = 0; i < formatted.length; i++) {
       if (RegExp('[0-9]').hasMatch(formatted[i])) {
         count++;
-        if (count >= digitsBefore) return i + 1; // cursor after this digit
+        if (count >= digitsBefore) return i + 1; 
       }
     }
     return formatted.length;
@@ -72,4 +72,6 @@ class ThousandsSeparatorInputFormatter extends TextInputFormatter {
     return sb.toString();
   }
 }
+
+
 

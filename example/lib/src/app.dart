@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bid4mission/bid4mission.dart' as bid4mission;
 import 'package:bid4mission/src/infrastructure/theme/theme_service.dart';
@@ -18,3 +18,5 @@ class App extends StatelessWidget {
     translationsKeys: bid4mission.LocalizationService.keys,
   );
 }
+
+

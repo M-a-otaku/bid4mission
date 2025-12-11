@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart' as intl;
 import '../../../../../generated/locales.g.dart';
@@ -14,7 +14,7 @@ class MissionDetailScreen extends GetView<MissionDetailController> {
 
   String _formatPrice(int price) {
     final formatter = intl.NumberFormat('#,###');
-    return '${formatter.format(price)} تومان';
+    return '${formatter.format(price)} ØªÙˆÙ…Ø§Ù†';
   }
 
   String _formatDate(DateTime date) {
@@ -81,11 +81,11 @@ class MissionDetailScreen extends GetView<MissionDetailController> {
                           }).toList(),
                         ),
                   const SizedBox(height: 30),
-                  // ...(true
-                  //     ? [
-                  //         _buildSelectedHunterMessage(),
-                  //       ]
-                  //     : <Widget>[]),
+                  
+                  
+                  
+                  
+                  
                   const SizedBox(height: 40),
                 ],
               ),
@@ -151,7 +151,7 @@ class MissionDetailScreen extends GetView<MissionDetailController> {
   }
 
   Widget _buildBidItem(BuildContext context, ProposalsModel bid, bool isSelected, bool canSelect) {
-    // allow empty string in the map to fallback to a friendly default
+    
     final resolvedName =
         (controller.usernames[bid.hunterId]?.trim().isNotEmpty == true)
             ? controller.usernames[bid.hunterId]!
@@ -192,7 +192,7 @@ class MissionDetailScreen extends GetView<MissionDetailController> {
     );
   }
 
-  // ویجت ردیف اطلاعات
+  
   Widget _buildInfoRow(BuildContext context, IconData icon, String label, String value) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
@@ -212,7 +212,7 @@ class MissionDetailScreen extends GetView<MissionDetailController> {
   }
 
   void _showSelectDialog(BuildContext context, ProposalsModel bid) {
-    // ensure empty strings don't propagate to UI, use fallback
+    
     final resolvedName =
         (controller.usernames[bid.hunterId]?.trim().isNotEmpty == true)
             ? controller.usernames[bid.hunterId]!
@@ -274,7 +274,7 @@ class MissionDetailScreen extends GetView<MissionDetailController> {
             ),
             onPressed: controller.isSelecting.value
                 ? null
-                : () => _showCancelDialog(context), // 🎯 فراخوانی دیالوگ
+                : () => _showCancelDialog(context), 
             icon: controller.isSelecting.value
                 ? const SizedBox(
                     width: 16,
@@ -312,7 +312,7 @@ class MissionDetailScreen extends GetView<MissionDetailController> {
             ),
             onPressed: () {
               Get.back();
-              controller.cancelHunterSelection(); // 🎯 فراخوانی متد Controller
+              controller.cancelHunterSelection(); 
             },
             child: Text(LocaleKeys.missions_page_cancel_confirm_yes.tr, style: TextStyle(fontSize: 16, color: colorScheme.onError)),
           ),
@@ -321,3 +321,5 @@ class MissionDetailScreen extends GetView<MissionDetailController> {
     );
   }
 }
+
+

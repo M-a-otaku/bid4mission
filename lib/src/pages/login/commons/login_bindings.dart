@@ -1,4 +1,4 @@
-import 'package:get/get.dart';
+﻿import 'package:get/get.dart';
 import '../controller/login_controller.dart';
 
 class LoginBindings extends Bindings {
@@ -7,3 +7,5 @@ class LoginBindings extends Bindings {
     Get.lazyPut(() => LoginController());
   }
 }
+
+

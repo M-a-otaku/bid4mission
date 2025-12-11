@@ -25,6 +25,8 @@
     "no_account": "Don't have an account?",
     "validate_password": "please enter password",
     "validate_password_min": "Please enter valid password minimum 8 Characters",
+    "validate_password_no_persian": "Password must not contain Persian characters",
+    "validate_username_no_persian": "Username must not contain Persian characters",
     "validate_username": "Please enter Username",
     "create_user": "User Successfully created"
   },
@@ -152,6 +154,7 @@
   },
   "missions_page": {
     "search_hint": "Search missions",
+    "sent_label": "Sent: {date}",
     "empty": "No missions found",
     "mission_not_requestable_title": "Notice",
     "mission_not_requestable": "This mission is no longer available for proposals",
@@ -224,7 +227,28 @@
     "delete_confirm_title": "Delete mission",
     "delete_confirm_content": "Are you sure you want to delete this mission?",
     "delete_success": "Mission deleted successfully",
-    "delete_error": "Failed to delete mission: {error}"
+    "delete_error": "Failed to delete mission: {error}",
+
+    "bid_dialog_title": "Submit proposal",
+    "bid_price_label": "Your proposed price (Toman)",
+    "bid_price_required": "Please enter a price",
+    "bid_price_invalid": "Invalid price",
+    "bid_price_positive": "Price must be greater than zero",
+    "bid_explain": "Enter the proposed price and press submit to send your proposal.",
+    "bid_submit_label": "Submit proposal",
+    "bid_sent_title": "Proposal sent",
+    "bid_sent_message": "Your proposal was sent successfully.",
+    "bid_already_title": "Proposal exists",
+    "bid_already_message": "You have already submitted a proposal for this mission.",
+
+    "confirm_done_title": "Completed",
+    "confirm_done_message": "Mission status updated to completed.",
+    "reject_done_title": "Rejected",
+    "reject_done_message": "Mission marked as failed.",
+
+    "language_changed_title": "Language changed",
+    "language_changed_to_fa": "Language changed to Persian",
+    "language_changed_to_en": "Language changed to English"
   },
   "status": {
     "open": "Open",
@@ -233,5 +257,31 @@
     "expired": "Expired",
     "pending_approval": "Pending Approval",
     "failed": "Failed"
-  }
+  },
+
+  "common_cancel": "Cancel",
+  "common_ok": "OK",
+  "common_error": "Error",
+  "currency_toman": "Toman",
+  "profile_page_mission_title_unknown": "Unknown mission title",
+  "profile_proposed_price_label": "Proposed price: {price}",
+  "profile_sent_label": "Sent: {date}",
+  "profile_button_announce_success": "Announce success",
+  "profile_button_announce_failure": "Announce failure",
+  "profile_action_edit_proposal_tooltip": "Edit proposal",
+  "profile_action_delete_proposal_tooltip": "Delete proposal",
+  "profile_dialog_request_completion_title": "Confirm completion",
+  "profile_dialog_request_completion_content": "Confirm that mission \"{title}\" was completed successfully?",
+  "profile_dialog_request_completion_confirm": "Confirm",
+  "profile_dialog_request_failure_title": "Confirm failure",
+  "profile_dialog_request_failure_content": "Confirm that mission \"{title}\" failed?",
+  "profile_dialog_request_failure_confirm": "Confirm",
+  "profile_edit_proposal_title": "Edit proposal",
+  "profile_edit_proposal_price_label": "Price",
+  "profile_edit_proposal_price_required": "Price is required",
+  "profile_edit_proposal_price_invalid": "Invalid price",
+  "profile_edit_proposal_save": "Save",
+  "profile_delete_proposal_title": "Delete proposal",
+  "profile_delete_proposal_content": "Are you sure you want to delete this proposal?",
+  "profile_delete_proposal_confirm": "Delete"
 }

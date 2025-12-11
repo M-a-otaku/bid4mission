@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,9 +9,9 @@ class SmartTagInput extends StatefulWidget {
   final String initialValue;
   final TextEditingController? controller;
 
-  /// If [controller] is provided, the parent owns the text state. Otherwise
-  /// the widget manages its own internal controller initialized with
-  /// [initialValue].
+  
+  
+  
   const SmartTagInput({Key? key, required this.onSelected, required this.initialValue, this.controller}) : super(key: key);
 
   @override
@@ -50,7 +50,7 @@ class _SmartTagInputState extends State<SmartTagInput> {
   void didUpdateWidget(covariant SmartTagInput oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.controller != oldWidget.controller) {
-      // parent switched controllers; prefer external controller if now provided
+      
       if (widget.controller != null) {
         _ctrl = widget.controller!;
       }
@@ -59,40 +59,34 @@ class _SmartTagInputState extends State<SmartTagInput> {
 
   void _onFocusChanged() {
     if (!mounted) return;
-    // rebuild so inline suggestions hide/show with focus
+    
     setState(() {});
   }
 
   void _selectSuggestion(String value) {
     if (!mounted) return;
-    // Update the field visually first
-    try { Get.log('SmartTagInput: selecting suggestion -> $value'); } catch (_) { print('SmartTagInput: selecting suggestion -> $value'); }
     setState(() {
       _ctrl.value = TextEditingValue(text: value, selection: TextSelection.collapsed(offset: value.length));
       _suggestions = [];
       _loading = false;
     });
 
-    // Keep history updated
+    
     _history.remove(value);
     _history.insert(0, value);
 
-    // Hide overlay immediately so it doesn't block taps
-    // _hideOverlay();
 
-    // Notify parent synchronously (parent should not overwrite controller if we just set it)
-    try { Get.log('SmartTagInput: calling onSelected with $value'); } catch (_) { print('SmartTagInput: calling onSelected with $value'); }
+    
     try { widget.onSelected(value); } catch (_) {}
 
-    // restore focus so user can continue typing
+    
     _focusNode.requestFocus();
   }
 
   void _onTextChanged(String value) {
-    // Notify parent immediately with the typed (trimmed) value so controllers
-    // don't stay with an empty category when user types but doesn't pick a chip.
+    
+    
     final trimmed = value.trim();
-    try { Get.log('SmartTagInput: onTextChanged -> $trimmed'); } catch (_) { print('SmartTagInput: onTextChanged -> $trimmed'); }
     widget.onSelected(trimmed);
 
     _debounce?.cancel();
@@ -126,8 +120,12 @@ class _SmartTagInputState extends State<SmartTagInput> {
     final historyMatches = _matchHistory(q);
     final merged = <String>{};
     final List<String> list = [];
-    for (var h in historyMatches) if (merged.add(h)) list.add(h);
-    for (var s in service) if (merged.add(s)) list.add(s);
+    for (var h in historyMatches) {
+      if (merged.add(h)) list.add(h);
+    }
+    for (var s in service) {
+      if (merged.add(s)) list.add(s);
+    }
 
     setState(() {
       _loading = false;
@@ -150,16 +148,16 @@ class _SmartTagInputState extends State<SmartTagInput> {
           controller: _ctrl,
           focusNode: _focusNode,
           decoration: const InputDecoration(
-            labelText: 'دسته‌بندی (مثلاً: طراحی، برنامه‌نویسی، ترجمه)',
             border: OutlineInputBorder(),
           ),
           onChanged: _onTextChanged,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: (value) {
-            if (value == null || value.trim().isEmpty) return 'دسته‌بندی را وارد کنید';
+            if (value == null || value.trim().isEmpty) return ;
             return null;
           },
         ),
-        // show inline suggestions when focused and suggestions exist
+        
         if (_focusNode.hasFocus && (_suggestions.isNotEmpty || _loading))
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
@@ -177,7 +175,6 @@ class _SmartTagInputState extends State<SmartTagInput> {
     if (_suggestions.isEmpty) return const SizedBox();
 
     final theme = Theme.of(context);
-    try { Get.log('SmartTagInput: building suggestions (${_suggestions.length})'); } catch (_) { print('SmartTagInput: building suggestions (${_suggestions.length})'); }
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
@@ -197,13 +194,12 @@ class _SmartTagInputState extends State<SmartTagInput> {
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTapDown: (_) {
-                try { Get.log('SmartTagInput: suggestion tapDown -> $s'); } catch (_) { print('SmartTagInput: suggestion tapDown -> $s'); }
                 _selectSuggestion(s);
               },
               child: ListTile(
                 leading: Icon(Icons.label_outline, color: theme.iconTheme.color?.withValues(alpha: 0.75), size: 18),
                 title: Text(s, style: theme.textTheme.bodyMedium),
-                // onTap left empty because we handle onTapDown
+                
               ),
             ),
           );
@@ -216,9 +212,11 @@ class _SmartTagInputState extends State<SmartTagInput> {
   void dispose() {
     _debounce?.cancel();
     _focusNode.removeListener(_onFocusChanged);
-    // only dispose the internal controller if we created it
+    
     _internalController?.dispose();
     _focusNode.dispose();
     super.dispose();
   }
 }
+
+
